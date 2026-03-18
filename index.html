@@ -8,9 +8,13 @@
 :root{--bg:#0f1117;--surface:#181b24;--surface2:#1e2230;--border:#2a2f42;--accent:#4f8ef7;--accent2:#7b61ff;--green:#2ecc8a;--yellow:#f7c94f;--red:#f75f5f;--text:#e8eaf2;--muted:#6b7394;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;min-height:100vh;}
+
+/* LOADING */
 #loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:14px;}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+/* LOGIN */
 #login-screen{min-height:100vh;display:none;align-items:center;justify-content:center;background:radial-gradient(ellipse at 60% 40%,#1a2040,var(--bg) 70%);}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:360px;box-shadow:0 32px 80px rgba(0,0,0,.5);}
 .login-card h1{font-size:2rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -23,6 +27,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .btn-login:hover{opacity:.9;}.btn-login:disabled{opacity:.5;cursor:not-allowed;}
 #login-error{color:var(--red);font-size:.85rem;margin-top:10px;text-align:center;display:none;}
 
+/* APP */
 #app{display:none;}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
 .logo{font-size:1.3rem;font-weight:700;}.logo span{color:var(--accent);}
@@ -32,7 +37,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .btn-out{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 12px;cursor:pointer;font-family:inherit;font-size:.85rem;transition:all .2s;}
 .btn-out:hover{border-color:var(--red);color:var(--red);}
 
-main{padding:24px;max-width:1300px;margin:0 auto;}
+main{padding:24px;max-width:1400px;margin:0 auto;}
 .tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
 .tab{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);font-family:inherit;font-size:.9rem;cursor:pointer;transition:all .2s;}
 .tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
@@ -43,47 +48,43 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .gap{margin-top:16px;}
 
 /* DAYS BOXES */
-.dboxes{display:flex;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
+.dboxes{display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap;}
 .dbox{flex:1;min-width:120px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
 .dbox .num{font-size:1.9rem;font-weight:700;}.dbox .lbl{color:var(--muted);font-size:.78rem;margin-top:3px;}
 .dbox.tot .num{color:var(--accent);}.dbox.usd .num{color:var(--yellow);}.dbox.lft .num{color:var(--green);}
 
-/* PERSON SELECTOR (admin only) */
-.person-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
-.person-bar span{font-size:.82rem;color:var(--muted);margin-right:4px;}
-.pbtn{border:2px solid var(--border);background:var(--surface2);border-radius:40px;padding:5px 14px 5px 7px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;font-family:inherit;font-size:.85rem;color:var(--muted);}
-.pbtn:hover{border-color:var(--accent);}
-.pbtn.active{color:#fff;font-weight:600;}
-.pbtn .pav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;flex-shrink:0;}
+/* ANNUAL CALENDAR */
+.annual-cal{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+@media(max-width:1100px){.annual-cal{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:760px){.annual-cal{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.annual-cal{grid-template-columns:1fr;}}
 
-/* CALENDAR */
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.cal-head h3{font-size:1.05rem;font-weight:600;}
-.cnav{display:flex;gap:6px;}
-.btn-nav{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:5px 11px;cursor:pointer;font-size:1rem;transition:border-color .2s;}
-.btn-nav:hover{border-color:var(--accent);}
-.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cdn{text-align:center;font-size:.7rem;font-weight:600;color:var(--muted);letter-spacing:.05em;padding:5px 0;text-transform:uppercase;}
-.cd{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.83rem;border:2px solid transparent;position:relative;user-select:none;flex-direction:column;gap:1px;transition:all .15s;}
-.cd.clickable{cursor:pointer;}
-.cd.clickable:hover:not(.hol){border-color:var(--accent);}
-.cd.emp,.cd.wk,.cd.past,.cd.hol{cursor:default;}
-.cd.wk{color:var(--muted);opacity:.4;}.cd.past{color:var(--muted);opacity:.3;}
-.cd.marked{background:rgba(46,204,138,.15);border-color:var(--green);color:var(--green);}
-.cd.tr{outline:2px solid var(--accent2);outline-offset:2px;}
-.cd.hol{background:rgba(255,90,90,.08);border-color:rgba(255,90,90,.28);color:#f09090;}
-.hdot{width:4px;height:4px;border-radius:50%;background:#f09090;}
-.htip{position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#2a1515;border:1px solid rgba(255,90,90,.35);border-radius:6px;padding:4px 8px;font-size:.68rem;white-space:nowrap;color:#f09090;display:none;z-index:50;pointer-events:none;}
-.cd:hover .htip{display:block;}
+.month-block{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;}
+.month-block.has-events{border-color:rgba(46,204,138,.3);}
+.month-name{font-size:.82rem;font-weight:700;text-align:center;margin-bottom:8px;color:var(--text);letter-spacing:.04em;text-transform:uppercase;}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
+.mini-dn{text-align:center;font-size:.58rem;color:var(--muted);padding:2px 0;font-weight:600;}
+.mini-d{width:100%;aspect-ratio:1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted);cursor:default;border:1.5px solid transparent;transition:all .12s;position:relative;}
+.mini-d.clickable{cursor:pointer;}
+.mini-d.clickable:hover:not(.hol){border-color:var(--accent);color:var(--text);}
+.mini-d.wk{opacity:.35;}
+.mini-d.past{opacity:.25;}
+.mini-d.hol{background:rgba(255,90,90,.1);color:#f09090 !important;font-size:.55rem;}
+.mini-d.marked{background:rgba(46,204,138,.2);border-color:var(--green);color:var(--green) !important;}
+.mini-d.selecting{background:rgba(79,142,247,.15);border-color:var(--accent);color:var(--accent) !important;}
+.mini-d.today-ring{outline:1.5px solid var(--accent2);outline-offset:1px;}
+.mini-d .htip{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#2a1515;border:1px solid rgba(255,90,90,.35);border-radius:5px;padding:3px 7px;font-size:.65rem;white-space:nowrap;color:#f09090;display:none;z-index:50;pointer-events:none;}
+.mini-d:hover .htip{display:block;}
 
-.legend{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap;}
+/* LEGEND */
+.legend{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap;}
 .li{display:flex;align-items:center;gap:5px;font-size:.76rem;color:var(--muted);}
 .ld{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 
-/* ADMIN EDIT PANEL */
-.edit-panel{margin-top:18px;padding-top:18px;border-top:1px solid var(--border);}
-.edit-panel h4{font-weight:600;margin-bottom:12px;}
-.edit-info{background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:.88rem;color:var(--muted);margin-bottom:11px;}
+/* EDIT PANEL */
+.edit-panel{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:20px;}
+.edit-panel h4{font-weight:600;margin-bottom:12px;font-size:.95rem;}
+.edit-info{font-size:.88rem;color:var(--muted);margin-bottom:12px;min-height:24px;}
 .edit-info span{color:var(--green);font-weight:500;}
 .edit-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .btn-mark{background:linear-gradient(135deg,var(--green),#1a9e65);border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:.88rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:opacity .2s;}
@@ -93,13 +94,13 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .btn-clr{background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:inherit;font-size:.88rem;padding:10px 16px;cursor:pointer;transition:all .2s;}
 .btn-clr:hover{border-color:var(--muted);}
 
-/* DAYS LIST */
-.days-list{display:flex;flex-direction:column;gap:8px;}
-.ditem{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.ditem-dates{flex:1;font-size:.88rem;font-weight:500;}
-.ditem-count{color:var(--muted);font-size:.8rem;}
-.btn-sm-del{background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:inherit;font-size:.78rem;padding:4px 10px;cursor:pointer;transition:all .2s;}
-.btn-sm-del:hover{border-color:var(--red);color:var(--red);}
+/* PERSON BAR */
+.person-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
+.person-bar>span{font-size:.82rem;color:var(--muted);}
+.pbtn{border:2px solid var(--border);background:var(--surface2);border-radius:40px;padding:5px 14px 5px 7px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;font-family:inherit;font-size:.85rem;color:var(--muted);}
+.pbtn:hover{border-color:var(--accent);}
+.pbtn.active{color:#fff;font-weight:600;}
+.pbtn .pav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;flex-shrink:0;}
 
 /* DAYS SETTING */
 .days-set-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
@@ -109,7 +110,15 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .btn-set{background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:inherit;font-size:.85rem;padding:7px 14px;cursor:pointer;transition:opacity .2s;}
 .btn-set:hover{opacity:.85;}
 
-/* MAP */
+/* PERIODS LIST */
+.periods-list{display:flex;flex-direction:column;gap:8px;}
+.prd-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.prd-item .dr{flex:1;font-size:.88rem;font-weight:500;}
+.prd-item .dc2{color:var(--muted);font-size:.78rem;}
+.btn-del{background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:inherit;font-size:.78rem;padding:4px 10px;cursor:pointer;transition:all .2s;}
+.btn-del:hover{border-color:var(--red);color:var(--red);}
+
+/* MAP TABLE */
 .map-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
 .mnav{display:flex;align-items:center;gap:7px;}
 .mnav span{font-weight:600;min-width:110px;text-align:center;}
@@ -119,7 +128,7 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .ttbl th.pc{width:96px;text-align:left;padding-left:10px;}
 .ttbl td{border:1px solid var(--border);padding:3px 2px;text-align:center;}
 .ttbl td.pnc{font-weight:500;font-size:.8rem;padding-left:10px;text-align:left;white-space:nowrap;}
-.dc{width:24px;height:24px;border-radius:3px;margin:auto;}
+.dc{width:22px;height:22px;border-radius:3px;margin:auto;}
 .dc.marked{background:var(--green);opacity:.8;}
 .dc.weekend{background:var(--border);opacity:.38;}
 .dc.hmap{background:rgba(255,90,90,.32);}
@@ -128,7 +137,6 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .empty{text-align:center;padding:36px;color:var(--muted);}.empty .ei{font-size:2rem;margin-bottom:8px;}
 .toast{position:fixed;bottom:22px;right:22px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:11px 16px;font-size:.86rem;box-shadow:0 8px 28px rgba(0,0,0,.45);transform:translateY(60px);opacity:0;transition:all .3s;z-index:999;max-width:300px;}
 .toast.show{transform:translateY(0);opacity:1;}.toast.success{border-color:var(--green);}.toast.error{border-color:var(--red);}
-.readonly-badge{background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);border-radius:6px;padding:3px 10px;font-size:.75rem;color:var(--accent);}
 </style>
 </head>
 <body>
@@ -168,27 +176,24 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
   <main>
     <div class="tabs" id="tabs"></div>
 
-    <!-- MINHAS FÉRIAS (view própria) -->
+    <!-- AS MINHAS FÉRIAS -->
     <div class="sec" id="sec-conta">
       <div class="card">
-        <h2 id="ctitle">As Minhas Férias</h2>
+        <h2 id="ctitle">As Minhas Férias — 2026</h2>
         <div class="dboxes">
           <div class="dbox tot"><div class="num" id="dt">—</div><div class="lbl">Com direito</div></div>
           <div class="dbox usd"><div class="num" id="du">—</div><div class="lbl">Marcados</div></div>
           <div class="dbox lft"><div class="num" id="dl">—</div><div class="lbl">Disponíveis</div></div>
         </div>
-        <div class="cal-head"><h3 id="clbl-c"></h3>
-          <div class="cnav"><button class="btn-nav" id="cprev-c">‹</button><button class="btn-nav" id="cnext-c">›</button></div>
-        </div>
-        <div class="cgrid" id="cal-c"></div>
+        <div class="annual-cal" id="cal-conta"></div>
         <div class="legend">
-          <div class="li"><div class="ld" style="background:rgba(46,204,138,.32)"></div>Férias marcadas</div>
+          <div class="li"><div class="ld" style="background:rgba(46,204,138,.3);border:1px solid var(--green)"></div>Férias marcadas</div>
           <div class="li"><div class="ld" style="background:rgba(255,90,90,.18);border:1px solid rgba(255,90,90,.38)"></div>Feriado 🇵🇹</div>
         </div>
       </div>
       <div class="card gap">
         <h2>Períodos de Férias</h2>
-        <div class="days-list" id="my-periods"></div>
+        <div class="periods-list" id="my-periods"></div>
       </div>
     </div>
 
@@ -197,7 +202,7 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
       <div class="card">
         <div class="map-head">
           <h2 style="font-size:1.25rem;font-weight:700">Mapa Geral de Férias</h2>
-          <div class="mnav"><button class="btn-nav" id="mprev">‹</button><span id="mlbl"></span><button class="btn-nav" id="mnext">›</button></div>
+          <div class="mnav"><button class="btn-nav" id="mprev" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:5px 11px;cursor:pointer;font-size:1rem;">‹</button><span id="mlbl"></span><button class="btn-nav" id="mnext" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:5px 11px;cursor:pointer;font-size:1rem;">›</button></div>
         </div>
         <div class="tcal"><table class="ttbl" id="ttbl"></table></div>
         <div class="legend" style="margin-top:12px">
@@ -208,53 +213,48 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
       </div>
     </div>
 
-    <!-- GESTÃO (só Daniel) -->
+    <!-- GESTÃO (Daniel) -->
     <div class="sec" id="sec-admin">
       <div style="margin-bottom:18px">
-        <h2 style="font-size:1.45rem;font-weight:700;margin-bottom:4px">Gestão de Férias</h2>
+        <h2 style="font-size:1.45rem;font-weight:700;margin-bottom:4px">Gestão de Férias — 2026</h2>
         <p style="color:var(--muted);font-size:.86rem">Marca e gere as férias de toda a equipa</p>
       </div>
 
-      <!-- Selecionar pessoa -->
       <div class="card" style="margin-bottom:16px">
         <h2>Seleciona a Pessoa</h2>
         <div class="person-bar" id="person-bar"></div>
       </div>
 
-      <!-- Calendário de gestão -->
-      <div class="card" style="margin-bottom:16px" id="admin-cal-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-          <div>
-            <h2 id="admin-cal-title" style="margin-bottom:4px">—</h2>
-            <div class="days-set-row">
-              <label>Dias com direito:</label>
-              <input type="number" id="days-input" min="0" max="60" value="22">
-              <button class="btn-set" id="btn-set-days">Guardar</button>
-              <span id="days-summary" style="font-size:.82rem;color:var(--muted)"></span>
-            </div>
+      <div class="card" id="admin-cal-card" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px">
+          <h2 id="admin-cal-title" style="margin:0"></h2>
+          <div class="days-set-row" style="margin:0">
+            <label>Dias com direito:</label>
+            <input type="number" id="days-input" min="0" max="60" value="22">
+            <button class="btn-set" id="btn-set-days">Guardar</button>
+            <span id="days-summary" style="font-size:.82rem;color:var(--muted)"></span>
           </div>
-          <div class="cnav"><button class="btn-nav" id="cprev-a">‹</button><span id="clbl-a" style="font-weight:600;min-width:110px;text-align:center"></span><button class="btn-nav" id="cnext-a">›</button></div>
         </div>
-        <div class="cgrid" id="cal-a"></div>
-        <div class="legend">
-          <div class="li"><div class="ld" style="background:rgba(46,204,138,.32)"></div>Férias marcadas</div>
+        <div class="annual-cal" id="cal-admin"></div>
+        <div class="legend" style="margin-top:16px">
+          <div class="li"><div class="ld" style="background:rgba(46,204,138,.3);border:1px solid var(--green)"></div>Férias marcadas</div>
+          <div class="li"><div class="ld" style="background:rgba(79,142,247,.2);border:1px solid var(--accent)"></div>Selecionado</div>
           <div class="li"><div class="ld" style="background:rgba(255,90,90,.18);border:1px solid rgba(255,90,90,.38)"></div>Feriado 🇵🇹</div>
         </div>
         <div class="edit-panel">
-          <h4>Marcar Férias</h4>
+          <h4>Marcar / Remover Férias</h4>
           <div class="edit-info" id="edit-info">Clica nos dias do calendário para selecionar o período</div>
           <div class="edit-actions">
             <button class="btn-mark" id="btn-mark" disabled>✓ Marcar Férias</button>
             <button class="btn-unmark" id="btn-unmark" disabled>✕ Remover Férias</button>
-            <button class="btn-clr" id="btn-clr">Limpar</button>
+            <button class="btn-clr" id="btn-clr">Limpar seleção</button>
           </div>
         </div>
       </div>
 
-      <!-- Períodos marcados -->
-      <div class="card">
+      <div class="card gap" id="admin-periods-card" style="display:none">
         <h2 id="admin-periods-title">Períodos Marcados</h2>
-        <div class="days-list" id="admin-periods"></div>
+        <div class="periods-list" id="admin-periods"></div>
       </div>
     </div>
 
@@ -264,7 +264,7 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBUTriZ0TJgxM45V3Rcf9k0btQVWYlsgt4",
@@ -274,8 +274,8 @@ const firebaseConfig = {
   messagingSenderId: "718937309850",
   appId: "1:718937309850:web:a3f7a5d8fdfe000c025523"
 };
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
 
 // ── CONFIG ───────────────────────────────────────────────
 const USERS = {
@@ -288,32 +288,52 @@ const USERS = {
   bruna:    { name:'Bruna',    color:'#5fe0f7', pw:'1234' },
 };
 const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const DNAMES=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-const FERIADOS={'2026-01-01':'Ano Novo','2026-02-17':'Carnaval','2026-04-03':'Sexta-feira Santa','2026-04-05':'Páscoa','2026-04-25':'Dia da Liberdade','2026-05-01':'Dia do Trabalhador','2026-05-14':'Corpo de Deus','2026-06-10':'Dia de Portugal','2026-08-15':'Assunção de N. Sra.','2026-10-05':'Implantação da República','2026-11-01':'Todos os Santos','2026-12-01':'Restauração da Independência','2026-12-08':'Imaculada Conceição','2026-12-25':'Natal'};
+const DNAMES=['D','S','T','Q','Q','S','S'];
+const FERIADOS={
+  '2026-01-01':'Ano Novo','2026-02-17':'Carnaval',
+  '2026-04-03':'Sexta-feira Santa','2026-04-05':'Páscoa',
+  '2026-04-25':'Dia da Liberdade','2026-05-01':'Dia do Trabalhador',
+  '2026-05-14':'Corpo de Deus','2026-06-10':'Dia de Portugal',
+  '2026-08-15':'Assunção de N. Sra.','2026-10-05':'Implantação da República',
+  '2026-11-01':'Todos os Santos','2026-12-01':'Restauração da Independência',
+  '2026-12-08':'Imaculada Conceição','2026-12-25':'Natal'
+};
 
 // ── STATE ────────────────────────────────────────────────
 let cu=null, isAdmin=false;
 let usersData={}, allPeriods=[];
-let calYC=2026, calMC=new Date().getMonth();
-let mapY=2026, mapM=new Date().getMonth();
-let calYA=2026, calMA=new Date().getMonth();
 let selA=null, selB=null;
 let adminTarget=null;
 let unsub=null;
+let mapY=2026, mapM=new Date().getMonth();
 
 // ── UTILS ────────────────────────────────────────────────
 const pad=n=>String(n).padStart(2,'0');
 const ds=(y,m,d)=>`${y}-${pad(m+1)}-${pad(d)}`;
 const isFer=d=>!!FERIADOS[d];
 const ferN=d=>FERIADOS[d]||'';
-const ini=name=>name.slice(0,2).toUpperCase();
+const ini=n=>n.slice(0,2).toUpperCase();
 const nameOf=id=>(USERS[id]||{}).name||id;
 const colorOf=id=>(USERS[id]||{}).color||'#888';
-function fmt(d){const p=d.split('-');return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('pt-PT',{day:'2-digit',month:'short',year:'numeric'});}
+const daysOf=id=>(usersData[id]||{}).days||22;
+
+function fmt(d){
+  const p=d.split('-');
+  return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('pt-PT',{day:'2-digit',month:'short'});
+}
+function fmtFull(d){
+  const p=d.split('-');
+  return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('pt-PT',{day:'2-digit',month:'long',year:'numeric'});
+}
 function wdays(a,b){
-  let n=0,d=new Date(a.split('-')[0],+a.split('-')[1]-1,+a.split('-')[2]);
+  let n=0;
+  const d=new Date(a.split('-')[0],+a.split('-')[1]-1,+a.split('-')[2]);
   const e=new Date(b.split('-')[0],+b.split('-')[1]-1,+b.split('-')[2]);
-  while(d<=e){const w=d.getDay(),s=ds(d.getFullYear(),d.getMonth(),d.getDate());if(w>0&&w<6&&!isFer(s))n++;d.setDate(d.getDate()+1);}
+  while(d<=e){
+    const w=d.getDay(),s=ds(d.getFullYear(),d.getMonth(),d.getDate());
+    if(w>0&&w<6&&!isFer(s))n++;
+    d.setDate(d.getDate()+1);
+  }
   return n;
 }
 function toast(msg,type='success'){
@@ -349,15 +369,15 @@ function doLogout(){
   if(unsub){unsub();unsub=null;}
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
-  document.getElementById('lu').value='';document.getElementById('lp').value='';
+  document.getElementById('lu').value='';
+  document.getElementById('lp').value='';
 }
 
 // ── INIT ─────────────────────────────────────────────────
 async function loadUsersData(){
   const snap=await getDocs(collection(db,'users'));
   snap.forEach(d=>{usersData[d.id]=d.data();});
-  // init missing
-  for(const[id]of Object.entries(USERS)){
+  for(const id of Object.keys(USERS)){
     if(!usersData[id]){
       await setDoc(doc(db,'users',id),{days:22});
       usersData[id]={days:22};
@@ -381,15 +401,11 @@ function initApp(){
     tabsEl.appendChild(b);
   });
 
-  document.getElementById('cprev-c').onclick=()=>{calMC--;if(calMC<0){calMC=11;calYC--;}renderCalC();};
-  document.getElementById('cnext-c').onclick=()=>{calMC++;if(calMC>11){calMC=0;calYC++;}renderCalC();};
   document.getElementById('mprev').onclick=()=>{mapM--;if(mapM<0){mapM=11;mapY--;}renderMapa();};
   document.getElementById('mnext').onclick=()=>{mapM++;if(mapM>11){mapM=0;mapY++;}renderMapa();};
-  document.getElementById('cprev-a').onclick=()=>{calMA--;if(calMA<0){calMA=11;calYA--;}renderCalA();};
-  document.getElementById('cnext-a').onclick=()=>{calMA++;if(calMA>11){calMA=0;calYA++;}renderCalA();};
   document.getElementById('btn-mark').onclick=markPeriod;
   document.getElementById('btn-unmark').onclick=unmarkPeriod;
-  document.getElementById('btn-clr').onclick=()=>{selA=null;selB=null;renderCalA();};
+  document.getElementById('btn-clr').onclick=()=>{selA=null;selB=null;renderCalAdmin();updateEditInfo();};
   document.getElementById('btn-set-days').onclick=saveDays;
 
   if(unsub)unsub();
@@ -416,22 +432,114 @@ function switchTab(id){
   if(id==='admin')renderAdmin();
 }
 
-// ── CONTA (readonly para todos) ──────────────────────────
+// ── ANNUAL CALENDAR RENDERER ─────────────────────────────
+// Renders all 12 months for a given userId
+// editable=true means Daniel can click days
+function renderAnnualCal(containerId, userId, editable){
+  const container=document.getElementById(containerId);
+  container.innerHTML='';
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayStr=ds(today.getFullYear(),today.getMonth(),today.getDate());
+  const userPeriods=allPeriods.filter(p=>p.userId===userId);
+
+  for(let m=0;m<12;m++){
+    const block=document.createElement('div');
+    block.className='month-block';
+
+    // check if this month has any marked days
+    const dim=new Date(2026,m+1,0).getDate();
+    let hasEvents=false;
+    for(let d=1;d<=dim;d++){
+      const dstr=ds(2026,m,d);
+      if(userPeriods.some(p=>dstr>=p.startDate&&dstr<=p.endDate)){hasEvents=true;break;}
+    }
+    if(hasEvents)block.classList.add('has-events');
+
+    // month name
+    const mn=document.createElement('div');
+    mn.className='month-name';mn.textContent=MONTHS[m];
+    block.appendChild(mn);
+
+    // mini grid
+    const grid=document.createElement('div');
+    grid.className='mini-grid';
+
+    // day names header
+    DNAMES.forEach(n=>{
+      const e=document.createElement('div');e.className='mini-dn';e.textContent=n;grid.appendChild(e);
+    });
+
+    // empty cells before first day
+    const first=new Date(2026,m,1).getDay();
+    for(let i=0;i<first;i++){
+      const e=document.createElement('div');grid.appendChild(e);
+    }
+
+    // days
+    for(let d=1;d<=dim;d++){
+      const dayStr=ds(2026,m,d);
+      const dw=new Date(2026,m,d).getDay();
+      const e=document.createElement('div');
+      e.className='mini-d';
+      e.textContent=d;
+
+      if(dayStr===todayStr) e.classList.add('today-ring');
+
+      if(dw===0||dw===6){
+        e.classList.add('wk');
+      } else if(isFer(dayStr)){
+        e.classList.add('hol');
+        e.textContent='★';
+        const tip=document.createElement('div');tip.className='htip';tip.textContent=ferN(dayStr);e.appendChild(tip);
+      } else {
+        const isMarked=userPeriods.some(p=>dayStr>=p.startDate&&dayStr<=p.endDate);
+        const dt=new Date(2026,m,d);
+
+        if(isMarked){
+          e.classList.add('marked');
+        } else if(dt<today&&!editable){
+          e.classList.add('past');
+        }
+
+        if(editable){
+          e.classList.add('clickable');
+          // selection highlight
+          if(selA&&selB){
+            const lo=selA<selB?selA:selB,hi=selA<selB?selB:selA;
+            if(dayStr>=lo&&dayStr<=hi&&!isMarked)e.classList.add('selecting');
+          } else if(selA===dayStr&&!isMarked){
+            e.classList.add('selecting');
+          }
+          e.onclick=()=>{
+            if(!selA){selA=dayStr;selB=null;}
+            else if(!selB){
+              if(dayStr===selA){selA=null;}
+              else if(dayStr<selA){selB=selA;selA=dayStr;}
+              else{selB=dayStr;}
+            } else {selA=dayStr;selB=null;}
+            updateEditInfo();
+            renderCalAdmin();
+          };
+        }
+      }
+      grid.appendChild(e);
+    }
+    block.appendChild(grid);
+    container.appendChild(block);
+  }
+}
+
+// ── CONTA ────────────────────────────────────────────────
 function renderConta(){
-  document.getElementById('ctitle').textContent='As Minhas Férias — '+nameOf(cu);
-  const tot=(usersData[cu]||{}).days||22;
+  document.getElementById('ctitle').textContent=`As Minhas Férias — ${nameOf(cu)}`;
+  const tot=daysOf(cu);
   const myP=allPeriods.filter(p=>p.userId===cu);
   const used=myP.reduce((s,p)=>s+p.workDays,0);
   document.getElementById('dt').textContent=tot;
   document.getElementById('du').textContent=used;
   document.getElementById('dl').textContent=Math.max(0,tot-used);
-  renderCalC();
+  renderAnnualCal('cal-conta',cu,false);
   renderMyPeriods();
-}
-
-function renderCalC(){
-  document.getElementById('clbl-c').textContent=`${MONTHS[calMC]} ${calYC}`;
-  renderCalGeneric('cal-c', calYC, calMC, cu, false);
 }
 
 function renderMyPeriods(){
@@ -439,52 +547,12 @@ function renderMyPeriods(){
   const mine=allPeriods.filter(p=>p.userId===cu).sort((a,b)=>a.startDate.localeCompare(b.startDate));
   if(!mine.length){cont.innerHTML='<div class="empty"><div class="ei">🗓️</div>Ainda não tens férias marcadas</div>';return;}
   cont.innerHTML=mine.map(p=>`
-    <div class="ditem">
+    <div class="prd-item">
       <div style="flex:1">
-        <div class="ditem-dates">${fmt(p.startDate)}${p.startDate!==p.endDate?' → '+fmt(p.endDate):''}</div>
-        <div class="ditem-count">${p.workDays} dia(s) útil(eis)</div>
+        <div class="dr">${fmtFull(p.startDate)}${p.startDate!==p.endDate?' → '+fmtFull(p.endDate):''}</div>
+        <div class="dc2">${p.workDays} dia(s) útil(eis)</div>
       </div>
     </div>`).join('');
-}
-
-// ── CALENDAR GENERIC ─────────────────────────────────────
-function renderCalGeneric(elId, y, m, userId, editable){
-  const cal=document.getElementById(elId);cal.innerHTML='';
-  DNAMES.forEach(n=>{const e=document.createElement('div');e.className='cdn';e.textContent=n;cal.appendChild(e);});
-  const first=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate();
-  const today=new Date();today.setHours(0,0,0,0);
-  const todayStr=ds(today.getFullYear(),today.getMonth(),today.getDate());
-  const userP=allPeriods.filter(p=>p.userId===userId);
-  for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cd emp';cal.appendChild(e);}
-  for(let d=1;d<=dim;d++){
-    const dayStr=ds(y,m,d), dw=new Date(y,m,d).getDay();
-    const e=document.createElement('div');e.className='cd';
-    const ns=document.createElement('span');ns.textContent=d;e.appendChild(ns);
-    if(dayStr===todayStr)e.classList.add('tr');
-    if(dw===0||dw===6){e.classList.add('wk');}
-    else if(isFer(dayStr)){
-      e.classList.add('hol');
-      const dot=document.createElement('div');dot.className='hdot';e.appendChild(dot);
-      const tip=document.createElement('div');tip.className='htip';tip.textContent=ferN(dayStr);e.appendChild(tip);
-    } else if(new Date(y,m,d)<today&&!editable){
-      e.classList.add('past');
-    } else {
-      const isMarked=userP.some(p=>dayStr>=p.startDate&&dayStr<=p.endDate);
-      if(isMarked) e.classList.add('marked');
-      if(editable){
-        e.classList.add('clickable');
-        if(selA&&selB){const lo=selA<selB?selA:selB,hi=selA<selB?selB:selA;if(dayStr>=lo&&dayStr<=hi&&!isMarked)e.style.background='rgba(79,142,247,.15)',e.style.borderColor='var(--accent)';}
-        else if(selA===dayStr){e.style.background='rgba(79,142,247,.15)';e.style.borderColor='var(--accent)';}
-        e.onclick=()=>{
-          if(!selA){selA=dayStr;selB=null;}
-          else if(!selB){if(dayStr===selA)selA=null;else if(dayStr<selA){selB=selA;selA=dayStr;}else selB=dayStr;}
-          else{selA=dayStr;selB=null;}
-          updateEditInfo();renderCalA();
-        };
-      }
-    }
-    cal.appendChild(e);
-  }
 }
 
 // ── MAPA ─────────────────────────────────────────────────
@@ -497,7 +565,7 @@ function renderMapa(){
   for(let d=1;d<=dim;d++){
     const dstr=ds(mapY,mapM,d),dw=new Date(mapY,mapM,d).getDay(),isH=isFer(dstr);
     const sty=(dw===0||dw===6)?'opacity:.38':isH?'color:#f09090;background:rgba(255,90,90,.07)':'';
-    html+=`<th style="${sty}"${isH?` title="${ferN(dstr)}"`:''}>${d}${isH?'<br><span style="font-size:.55rem">🇵🇹</span>':''}</th>`;
+    html+=`<th style="${sty}"${isH?` title="${ferN(dstr)}"`:''}>${d}${isH?'<br><span style="font-size:.5rem">🇵🇹</span>':''}</th>`;
   }
   html+='</tr></thead><tbody>';
   Object.keys(USERS).forEach(uid=>{
@@ -511,7 +579,7 @@ function renderMapa(){
       if(dw===0||dw===6)cls='weekend';
       else if(isH)cls='hmap';
       else if(allPeriods.some(p=>p.userId===uid&&dstr>=p.startDate&&dstr<=p.endDate))cls='marked';
-      html+=`<td><div class="dc ${cls}${isTd?' tm':''}" title="${isH?ferN(dstr):nameOf(uid)+' — '+fmt(dstr)}"></div></td>`;
+      html+=`<td><div class="dc ${cls}${isTd?' tm':''}" title="${isH?ferN(dstr):nameOf(uid)+' — '+fmtFull(dstr)}"></div></td>`;
     }
     html+='</tr>';
   });
@@ -521,49 +589,53 @@ function renderMapa(){
 // ── ADMIN ────────────────────────────────────────────────
 function renderAdmin(){
   if(!isAdmin)return;
-  // build person bar
   const bar=document.getElementById('person-bar');
   bar.innerHTML='<span>Pessoa:</span>';
   Object.entries(USERS).forEach(([uid,cfg])=>{
     const b=document.createElement('button');
     b.className='pbtn'+(adminTarget===uid?' active':'');
-    if(adminTarget===uid)b.style.borderColor=cfg.color;
+    if(adminTarget===uid){b.style.borderColor=cfg.color;b.style.color='#fff';b.style.background=cfg.color+'22';}
     b.innerHTML=`<div class="pav" style="background:${cfg.color};color:#fff">${ini(cfg.name)}</div>${cfg.name}`;
     b.onclick=()=>{adminTarget=uid;selA=null;selB=null;renderAdmin();};
     bar.appendChild(b);
   });
+
+  const calCard=document.getElementById('admin-cal-card');
+  const perCard=document.getElementById('admin-periods-card');
+
   if(!adminTarget){
-    document.getElementById('admin-cal-title').textContent='— Seleciona uma pessoa —';
-    document.getElementById('admin-periods').innerHTML='<div class="empty"><div class="ei">👆</div>Seleciona uma pessoa acima</div>';
-    document.getElementById('admin-periods-title').textContent='Períodos Marcados';
-    return;
+    calCard.style.display='none';perCard.style.display='none';return;
   }
-  // title & days
-  const tot=(usersData[adminTarget]||{}).days||22;
+  calCard.style.display='block';perCard.style.display='block';
+
+  const tot=daysOf(adminTarget);
   const used=allPeriods.filter(p=>p.userId===adminTarget).reduce((s,p)=>s+p.workDays,0);
-  document.getElementById('admin-cal-title').textContent=`Férias — ${nameOf(adminTarget)}`;
+  document.getElementById('admin-cal-title').textContent=`Férias de ${nameOf(adminTarget)} — 2026`;
   document.getElementById('days-input').value=tot;
   document.getElementById('days-summary').textContent=`${used} marcados · ${Math.max(0,tot-used)} disponíveis`;
   document.getElementById('admin-periods-title').textContent=`Períodos Marcados — ${nameOf(adminTarget)}`;
-  renderCalA();
+
+  renderCalAdmin();
   renderAdminPeriods();
+  updateEditInfo();
 }
 
-function renderCalA(){
-  document.getElementById('clbl-a').textContent=`${MONTHS[calMA]} ${calYA}`;
+function renderCalAdmin(){
   if(!adminTarget)return;
-  renderCalGeneric('cal-a',calYA,calMA,adminTarget,true);
-  updateEditInfo();
+  renderAnnualCal('cal-admin',adminTarget,true);
 }
 
 function updateEditInfo(){
   const el=document.getElementById('edit-info');
   const btnM=document.getElementById('btn-mark');
   const btnU=document.getElementById('btn-unmark');
-  if(!selA){el.innerHTML='Clica nos dias do calendário para selecionar o período';btnM.disabled=true;btnU.disabled=true;return;}
+  if(!selA){
+    el.innerHTML='Clica nos dias do calendário para selecionar o período';
+    btnM.disabled=true;btnU.disabled=true;return;
+  }
   const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
   const wd=wdays(lo,hi);
-  el.innerHTML=`<span>${fmt(lo)}</span>${hi!==lo?' → <span>'+fmt(hi)+'</span>':''} &nbsp;·&nbsp; <strong>${wd} dia(s) útil(eis)</strong>`;
+  el.innerHTML=`<span>${fmtFull(lo)}</span>${hi!==lo?' → <span>'+fmtFull(hi)+'</span>':''} &nbsp;·&nbsp; <strong>${wd} dia(s) útil(eis)</strong>`;
   btnM.disabled=wd===0;btnU.disabled=wd===0;
 }
 
@@ -571,12 +643,15 @@ async function markPeriod(){
   if(!selA||!adminTarget)return;
   const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
   const days=wdays(lo,hi);
-  const tot=(usersData[adminTarget]||{}).days||22;
+  const tot=daysOf(adminTarget);
   const used=allPeriods.filter(p=>p.userId===adminTarget).reduce((s,p)=>s+p.workDays,0);
-  if(used+days>tot){toast(`${nameOf(adminTarget)} não tem dias suficientes!`,'error');return;}
+  if(used+days>tot){toast(`${nameOf(adminTarget)} não tem dias suficientes! (${tot-used} disponíveis)`,'error');return;}
   const btn=document.getElementById('btn-mark');btn.disabled=true;btn.textContent='A guardar...';
   try{
-    await addDoc(collection(db,'periods'),{userId:adminTarget,startDate:lo,endDate:hi,workDays:days,createdAt:new Date().toISOString()});
+    await addDoc(collection(db,'periods'),{
+      userId:adminTarget,startDate:lo,endDate:hi,
+      workDays:days,createdAt:new Date().toISOString()
+    });
     selA=null;selB=null;
     toast(`Férias de ${nameOf(adminTarget)} marcadas! ✓`);
   }catch(e){toast('Erro ao guardar.','error');}
@@ -586,12 +661,11 @@ async function markPeriod(){
 async function unmarkPeriod(){
   if(!selA||!adminTarget)return;
   const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
-  // find overlapping periods
   const toDelete=allPeriods.filter(p=>p.userId===adminTarget&&p.endDate>=lo&&p.startDate<=hi);
   if(!toDelete.length){toast('Não há férias marcadas nesse período.','error');return;}
   if(!confirm(`Vais remover ${toDelete.length} período(s) de férias de ${nameOf(adminTarget)}. Confirmas?`))return;
   try{
-    for(const p of toDelete) await deleteDoc(doc(db,'periods',p.id));
+    for(const p of toDelete)await deleteDoc(doc(db,'periods',p.id));
     selA=null;selB=null;
     toast(`Férias de ${nameOf(adminTarget)} removidas.`,'error');
   }catch(e){toast('Erro.','error');}
@@ -614,12 +688,12 @@ function renderAdminPeriods(){
   const mine=allPeriods.filter(p=>p.userId===adminTarget).sort((a,b)=>a.startDate.localeCompare(b.startDate));
   if(!mine.length){cont.innerHTML='<div class="empty"><div class="ei">🗓️</div>Sem férias marcadas</div>';return;}
   cont.innerHTML=mine.map(p=>`
-    <div class="ditem">
+    <div class="prd-item">
       <div style="flex:1">
-        <div class="ditem-dates">${fmt(p.startDate)}${p.startDate!==p.endDate?' → '+fmt(p.endDate):''}</div>
-        <div class="ditem-count">${p.workDays} dia(s) útil(eis)</div>
+        <div class="dr">${fmtFull(p.startDate)}${p.startDate!==p.endDate?' → '+fmtFull(p.endDate):''}</div>
+        <div class="dc2">${p.workDays} dia(s) útil(eis)</div>
       </div>
-      <button class="btn-sm-del" onclick="window._delPeriod('${p.id}')">🗑 Remover</button>
+      <button class="btn-del" onclick="window._delPeriod('${p.id}')">🗑 Remover</button>
     </div>`).join('');
 }
 
