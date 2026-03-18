@@ -118,21 +118,24 @@ main{padding:24px;max-width:1400px;margin:0 auto;}
 .btn-del{background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:inherit;font-size:.78rem;padding:4px 10px;cursor:pointer;transition:all .2s;}
 .btn-del:hover{border-color:var(--red);color:var(--red);}
 
-/* ANNUAL TEAM MAP */
-.team-map{overflow-x:auto;width:100%;}
-.team-map-inner{min-width:900px;}
-.tm-month-headers{display:grid;grid-template-columns:90px repeat(12,1fr);gap:2px;margin-bottom:4px;}
-.tm-month-hdr{text-align:center;font-size:.68rem;font-weight:700;color:var(--accent);letter-spacing:.04em;text-transform:uppercase;padding:4px 2px;}
-.tm-person-row{display:grid;grid-template-columns:90px repeat(12,1fr);gap:2px;margin-bottom:2px;align-items:center;}
-.tm-person-label{display:flex;align-items:center;gap:6px;padding-right:8px;}
-.tm-person-label .lav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex-shrink:0;color:#fff;}
-.tm-person-name{font-size:.78rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.tm-month-cell{display:grid;gap:1px;background:var(--surface2);border-radius:4px;padding:2px;}
-.tm-day{height:10px;border-radius:2px;background:var(--border);opacity:.3;}
-.tm-day.marked{background:var(--green);opacity:.85;}
-.tm-day.wk{background:var(--surface);opacity:.8;}
-.tm-day.hol{background:rgba(255,90,90,.5);opacity:1;}
-.tm-day.today-d{outline:1.5px solid var(--accent2);outline-offset:0px;border-radius:2px;}
+/* ANNUAL TEAM MAP - grid of 12 months, each month shows all people */
+.team-map-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:1100px){.team-map-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:760px){.team-map-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.team-map-grid{grid-template-columns:1fr;}}
+.tm-block{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;}
+.tm-month-title{font-size:.82rem;font-weight:700;text-align:center;margin-bottom:8px;color:var(--text);letter-spacing:.04em;text-transform:uppercase;}
+.tm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
+.tm-dn{text-align:center;font-size:.58rem;color:var(--muted);padding:2px 0;font-weight:600;}
+.tm-d{width:100%;aspect-ratio:1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);position:relative;overflow:visible;}
+.tm-d.wk{opacity:.3;}
+.tm-d.hol{background:rgba(255,90,90,.12);border:1px solid rgba(255,90,90,.3);color:#f09090;font-size:.5rem;}
+.tm-d.today-ring{outline:1.5px solid var(--accent2);outline-offset:1px;border-radius:3px;}
+/* person dots inside a day */
+.tm-d .dot-row{position:absolute;bottom:1px;left:0;right:0;display:flex;justify-content:center;gap:1px;flex-wrap:wrap;}
+.tm-d .pdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+/* full day marked - colored background blend */
+.tm-d.fully-marked{color:#fff;}
 
 /* MAP TABLE (kept for reference but unused) */
 
@@ -204,10 +207,9 @@ main{padding:24px;max-width:1400px;margin:0 auto;}
       <div class="card">
         <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:20px">Mapa Geral de Férias — 2026</h2>
         <div id="team-map-container"></div>
-        <div class="legend" style="margin-top:16px">
-          <div class="li"><div class="ld" style="background:var(--green);opacity:.8"></div>Férias</div>
-          <div class="li"><div class="ld" style="background:var(--border);opacity:.5"></div>Fim-de-semana</div>
-          <div class="li"><div class="ld" style="background:rgba(255,90,90,.35)"></div>Feriado 🇵🇹</div>
+        <div class="legend" style="margin-top:20px">
+          <div class="li"><div class="ld" style="background:rgba(255,90,90,.18);border:1px solid rgba(255,90,90,.38)"></div>Feriado 🇵🇹</div>
+          <div id="team-legend" style="display:contents"></div>
         </div>
       </div>
     </div>
@@ -552,59 +554,72 @@ function renderMyPeriods(){
     </div>`).join('');
 }
 
-// ── MAPA ANUAL ────────────────────────────────────────────
+// ── MAPA ANUAL EQUIPA ────────────────────────────────────
 function renderMapa(){
   const cont=document.getElementById('team-map-container');
   const today=new Date(); today.setHours(0,0,0,0);
   const todayStr=ds(today.getFullYear(),today.getMonth(),today.getDate());
+  const userIds=Object.keys(USERS);
+  const DNAMES_MAP=['D','S','T','Q','Q','S','S'];
 
-  // build month column widths based on days count
-  const dimPerMonth=Array.from({length:12},(_,m)=>new Date(2026,m+1,0).getDate());
+  // build legend
+  const leg=document.getElementById('team-legend');
+  leg.innerHTML=userIds.map(uid=>`
+    <div class="li">
+      <div class="ld" style="background:${colorOf(uid)};border-radius:50%"></div>
+      ${nameOf(uid)}
+    </div>`).join('');
 
-  let html='<div class="team-map"><div class="team-map-inner">';
+  let html='<div class="team-map-grid">';
 
-  // Month name headers
-  html+='<div class="tm-month-headers"><div></div>';
   for(let m=0;m<12;m++){
-    html+=`<div class="tm-month-hdr">${MONTHS[m].slice(0,3)}</div>`;
-  }
-  html+='</div>';
+    const dim=new Date(2026,m+1,0).getDate();
+    const first=new Date(2026,m,1).getDay();
 
-  // One row per person
-  Object.keys(USERS).forEach(uid=>{
-    const uname=nameOf(uid), ucol=colorOf(uid);
-    html+=`<div class="tm-person-row">`;
-    // person label
-    html+=`<div class="tm-person-label">
-      <div class="lav" style="background:${ucol}">${ini(uname)}</div>
-      <span class="tm-person-name">${uname}</span>
-    </div>`;
+    html+=`<div class="tm-block">`;
+    html+=`<div class="tm-month-title">${MONTHS[m]}</div>`;
+    html+=`<div class="tm-grid">`;
 
-    // one cell per month
-    for(let m=0;m<12;m++){
-      const dim=dimPerMonth[m];
-      const cols=dim; // one column per day
-      html+=`<div class="tm-month-cell" style="grid-template-columns:repeat(${cols},1fr)">`;
-      for(let d=1;d<=dim;d++){
-        const dstr=ds(2026,m,d);
-        const dw=new Date(2026,m,d).getDay();
-        const isH=isFer(dstr);
-        const isMarked=allPeriods.some(p=>p.userId===uid&&dstr>=p.startDate&&dstr<=p.endDate);
-        const isToday=dstr===todayStr;
-        let cls='tm-day';
-        if(isH) cls+=' hol';
-        else if(dw===0||dw===6) cls+=' wk';
-        else if(isMarked) cls+=' marked';
-        if(isToday) cls+=' today-d';
-        const tip=isH?ferN(dstr):isMarked?`${uname}: ${fmtFull(dstr)}`:`${d}`;
-        html+=`<div class="${cls}" title="${tip}"></div>`;
+    // day name headers
+    DNAMES_MAP.forEach(n=>{html+=`<div class="tm-dn">${n}</div>`;});
+
+    // empty cells
+    for(let i=0;i<first;i++) html+=`<div></div>`;
+
+    // days
+    for(let d=1;d<=dim;d++){
+      const dayStr=ds(2026,m,d);
+      const dw=new Date(2026,m,d).getDay();
+      const isToday=dayStr===todayStr;
+      const isH=isFer(dayStr);
+      const isWk=dw===0||dw===6;
+
+      // who has vacation this day?
+      const onVac=userIds.filter(uid=>
+        allPeriods.some(p=>p.userId===uid&&dayStr>=p.startDate&&dayStr<=p.endDate)
+      );
+
+      let cls='tm-d';
+      if(isWk) cls+=' wk';
+      if(isH) cls+=' hol';
+      if(isToday) cls+=' today-ring';
+
+      let inner=`<span>${d}</span>`;
+
+      if(!isWk&&!isH&&onVac.length>0){
+        // show colored dots for each person on vacation
+        const dots=onVac.map(uid=>`<div class="pdot" style="background:${colorOf(uid)}" title="${nameOf(uid)}"></div>`).join('');
+        inner=`<span style="font-size:.55rem">${d}</span><div class="dot-row">${dots}</div>`;
       }
-      html+='</div>';
-    }
-    html+='</div>';
-  });
 
-  html+='</div></div>';
+      const tip=isH?ferN(dayStr):onVac.length?onVac.map(nameOf).join(', '):'';
+      html+=`<div class="${cls}"${tip?` title="${tip}"`:''}>${inner}</div>`;
+    }
+
+    html+=`</div></div>`;
+  }
+
+  html+='</div>';
   cont.innerHTML=html;
 }
 
