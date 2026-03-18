@@ -20,10 +20,9 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 .field select,.field input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:.95rem;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
 .field select:focus,.field input:focus{border-color:var(--accent);}
 .btn-login{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:inherit;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px;transition:opacity .2s;}
-.btn-login:hover{opacity:.9;}
-.btn-login:disabled{opacity:.5;cursor:not-allowed;}
-.login-hint{color:var(--muted);font-size:.78rem;margin-top:16px;text-align:center;}
+.btn-login:hover{opacity:.9;}.btn-login:disabled{opacity:.5;cursor:not-allowed;}
 #login-error{color:var(--red);font-size:.85rem;margin-top:10px;text-align:center;display:none;}
+
 #app{display:none;}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
 .logo{font-size:1.3rem;font-weight:700;}.logo span{color:var(--accent);}
@@ -32,18 +31,32 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0;}
 .btn-out{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 12px;cursor:pointer;font-family:inherit;font-size:.85rem;transition:all .2s;}
 .btn-out:hover{border-color:var(--red);color:var(--red);}
+
 main{padding:24px;max-width:1300px;margin:0 auto;}
 .tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
 .tab{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);font-family:inherit;font-size:.9rem;cursor:pointer;transition:all .2s;}
 .tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
 .tab:hover:not(.active){border-color:var(--accent);color:var(--accent);}
 .sec{display:none;}.sec.on{display:block;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}.card h2{font-size:1.25rem;font-weight:700;margin-bottom:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
+.card h2{font-size:1.25rem;font-weight:700;margin-bottom:18px;}
 .gap{margin-top:16px;}
+
+/* DAYS BOXES */
 .dboxes{display:flex;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
 .dbox{flex:1;min-width:120px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
 .dbox .num{font-size:1.9rem;font-weight:700;}.dbox .lbl{color:var(--muted);font-size:.78rem;margin-top:3px;}
 .dbox.tot .num{color:var(--accent);}.dbox.usd .num{color:var(--yellow);}.dbox.lft .num{color:var(--green);}
+
+/* PERSON SELECTOR (admin only) */
+.person-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
+.person-bar span{font-size:.82rem;color:var(--muted);margin-right:4px;}
+.pbtn{border:2px solid var(--border);background:var(--surface2);border-radius:40px;padding:5px 14px 5px 7px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;font-family:inherit;font-size:.85rem;color:var(--muted);}
+.pbtn:hover{border-color:var(--accent);}
+.pbtn.active{color:#fff;font-weight:600;}
+.pbtn .pav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;flex-shrink:0;}
+
+/* CALENDAR */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .cal-head h3{font-size:1.05rem;font-weight:600;}
 .cnav{display:flex;gap:6px;}
@@ -51,65 +64,52 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .btn-nav:hover{border-color:var(--accent);}
 .cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cdn{text-align:center;font-size:.7rem;font-weight:600;color:var(--muted);letter-spacing:.05em;padding:5px 0;text-transform:uppercase;}
-.cd{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.83rem;cursor:pointer;transition:all .15s;border:2px solid transparent;position:relative;user-select:none;flex-direction:column;gap:1px;}
-.cd:hover:not(.emp):not(.wk):not(.past):not(.hol){border-color:var(--accent);}
+.cd{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.83rem;border:2px solid transparent;position:relative;user-select:none;flex-direction:column;gap:1px;transition:all .15s;}
+.cd.clickable{cursor:pointer;}
+.cd.clickable:hover:not(.hol){border-color:var(--accent);}
 .cd.emp,.cd.wk,.cd.past,.cd.hol{cursor:default;}
 .cd.wk{color:var(--muted);opacity:.4;}.cd.past{color:var(--muted);opacity:.3;}
-.cd.pending{background:rgba(247,201,79,.15);border-color:var(--yellow);color:var(--yellow);}
-.cd.approved{background:rgba(46,204,138,.15);border-color:var(--green);color:var(--green);}
-.cd.rejected{background:rgba(247,95,95,.1);border-color:var(--red);color:var(--red);opacity:.55;}
+.cd.marked{background:rgba(46,204,138,.15);border-color:var(--green);color:var(--green);}
 .cd.tr{outline:2px solid var(--accent2);outline-offset:2px;}
-.cd.sel{background:rgba(79,142,247,.18);border-color:var(--accent);color:var(--accent);}
 .cd.hol{background:rgba(255,90,90,.08);border-color:rgba(255,90,90,.28);color:#f09090;}
 .hdot{width:4px;height:4px;border-radius:50%;background:#f09090;}
 .htip{position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#2a1515;border:1px solid rgba(255,90,90,.35);border-radius:6px;padding:4px 8px;font-size:.68rem;white-space:nowrap;color:#f09090;display:none;z-index:50;pointer-events:none;}
 .cd:hover .htip{display:block;}
+
 .legend{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap;}
 .li{display:flex;align-items:center;gap:5px;font-size:.76rem;color:var(--muted);}
 .ld{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.rform{margin-top:18px;padding-top:18px;border-top:1px solid var(--border);}
-.rform h4{font-weight:600;margin-bottom:10px;}
-.rinfo{background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:.88rem;color:var(--muted);margin-bottom:11px;}
-.rinfo span{color:var(--accent);font-weight:500;}
-.btn-sub{background:linear-gradient(135deg,var(--green),#1a9e65);border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:.88rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:opacity .2s;}
-.btn-sub:hover{opacity:.88;}.btn-sub:disabled{opacity:.3;cursor:not-allowed;}
-.btn-clr{background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:inherit;font-size:.88rem;padding:10px 16px;cursor:pointer;margin-left:7px;transition:all .2s;}
-.btn-clr:hover{border-color:var(--red);color:var(--red);}
-.rlist{display:flex;flex-direction:column;gap:9px;}
-.ritem{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:13px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.rdates{flex:1;}.rdates .dr{font-weight:500;font-size:.88rem;}.rdates .dc2{color:var(--muted);font-size:.78rem;margin-top:2px;}
-.badge{border-radius:20px;padding:3px 10px;font-size:.76rem;font-weight:600;}
-.badge.pending{background:rgba(247,201,79,.15);color:var(--yellow);border:1px solid rgba(247,201,79,.3);}
-.badge.approved{background:rgba(46,204,138,.15);color:var(--green);border:1px solid rgba(46,204,138,.3);}
-.badge.rejected{background:rgba(247,95,95,.15);color:var(--red);border:1px solid rgba(247,95,95,.3);}
-.btn-sm{background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:inherit;font-size:.78rem;padding:4px 10px;cursor:pointer;transition:all .2s;}
-.btn-sm:hover{border-color:var(--red);color:var(--red);}
-.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:680px){.admin-grid{grid-template-columns:1fr;}}
-.mcard{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
-.mhead{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
-.mname{font-weight:600;font-size:.92rem;}.msub{color:var(--muted);font-size:.78rem;}
-.dset{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-.dset span{font-size:.8rem;color:var(--muted);}
-.dset input{width:60px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 7px;color:var(--text);font-family:inherit;font-size:.88rem;text-align:center;outline:none;}
-.dset input:focus{border-color:var(--accent);}
-.btn-save{background:var(--accent);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:.8rem;padding:5px 11px;cursor:pointer;transition:opacity .2s;}
-.btn-save:hover{opacity:.85;}
-.mbar{height:5px;background:var(--border);border-radius:99px;margin-top:9px;overflow:hidden;}
-.mbar-f{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .4s;}
-.plist{display:flex;flex-direction:column;gap:9px;}
-.pitem{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:13px 16px;display:flex;align-items:center;gap:11px;flex-wrap:wrap;}
-.pperson{display:flex;align-items:center;gap:9px;flex:1;min-width:150px;}
-.pinfo .pn{font-weight:500;font-size:.88rem;}.pinfo .pd{color:var(--muted);font-size:.78rem;}
-.abtns{display:flex;gap:7px;flex-wrap:wrap;}
-.btn-ap{background:rgba(46,204,138,.14);border:1px solid rgba(46,204,138,.38);color:var(--green);border-radius:7px;font-family:inherit;font-size:.8rem;font-weight:600;padding:5px 13px;cursor:pointer;transition:all .2s;}
-.btn-ap:hover{background:rgba(46,204,138,.26);}
-.btn-rj{background:rgba(247,95,95,.1);border:1px solid rgba(247,95,95,.28);color:var(--red);border-radius:7px;font-family:inherit;font-size:.8rem;font-weight:600;padding:5px 13px;cursor:pointer;transition:all .2s;}
-.btn-rj:hover{background:rgba(247,95,95,.2);}
-.btn-un{background:rgba(247,201,79,.1);border:1px solid rgba(247,201,79,.32);color:var(--yellow);border-radius:7px;font-family:inherit;font-size:.8rem;font-weight:600;padding:5px 13px;cursor:pointer;transition:all .2s;}
-.btn-un:hover{background:rgba(247,201,79,.2);}
-.btn-del{background:rgba(247,95,95,.1);border:1px solid rgba(247,95,95,.28);color:var(--red);border-radius:7px;font-family:inherit;font-size:.8rem;font-weight:600;padding:5px 13px;cursor:pointer;transition:all .2s;}
-.btn-del:hover{background:rgba(247,95,95,.2);}
+
+/* ADMIN EDIT PANEL */
+.edit-panel{margin-top:18px;padding-top:18px;border-top:1px solid var(--border);}
+.edit-panel h4{font-weight:600;margin-bottom:12px;}
+.edit-info{background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:.88rem;color:var(--muted);margin-bottom:11px;}
+.edit-info span{color:var(--green);font-weight:500;}
+.edit-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-mark{background:linear-gradient(135deg,var(--green),#1a9e65);border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:.88rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:opacity .2s;}
+.btn-mark:hover{opacity:.88;}.btn-mark:disabled{opacity:.3;cursor:not-allowed;}
+.btn-unmark{background:rgba(247,95,95,.12);border:1px solid rgba(247,95,95,.3);border-radius:10px;color:var(--red);font-family:inherit;font-size:.88rem;font-weight:600;padding:10px 18px;cursor:pointer;transition:all .2s;}
+.btn-unmark:hover{background:rgba(247,95,95,.22);}.btn-unmark:disabled{opacity:.3;cursor:not-allowed;}
+.btn-clr{background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:inherit;font-size:.88rem;padding:10px 16px;cursor:pointer;transition:all .2s;}
+.btn-clr:hover{border-color:var(--muted);}
+
+/* DAYS LIST */
+.days-list{display:flex;flex-direction:column;gap:8px;}
+.ditem{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.ditem-dates{flex:1;font-size:.88rem;font-weight:500;}
+.ditem-count{color:var(--muted);font-size:.8rem;}
+.btn-sm-del{background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:inherit;font-size:.78rem;padding:4px 10px;cursor:pointer;transition:all .2s;}
+.btn-sm-del:hover{border-color:var(--red);color:var(--red);}
+
+/* DAYS SETTING */
+.days-set-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.days-set-row label{font-size:.85rem;color:var(--muted);}
+.days-set-row input{width:70px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-family:inherit;font-size:.9rem;text-align:center;outline:none;}
+.days-set-row input:focus{border-color:var(--accent);}
+.btn-set{background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:inherit;font-size:.85rem;padding:7px 14px;cursor:pointer;transition:opacity .2s;}
+.btn-set:hover{opacity:.85;}
+
+/* MAP */
 .map-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
 .mnav{display:flex;align-items:center;gap:7px;}
 .mnav span{font-weight:600;min-width:110px;text-align:center;}
@@ -120,12 +120,15 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 .ttbl td{border:1px solid var(--border);padding:3px 2px;text-align:center;}
 .ttbl td.pnc{font-weight:500;font-size:.8rem;padding-left:10px;text-align:left;white-space:nowrap;}
 .dc{width:24px;height:24px;border-radius:3px;margin:auto;}
-.dc.approved{background:var(--green);opacity:.78;}.dc.pending{background:var(--yellow);opacity:.62;}
-.dc.weekend{background:var(--border);opacity:.38;}.dc.hmap{background:rgba(255,90,90,.32);}
+.dc.marked{background:var(--green);opacity:.8;}
+.dc.weekend{background:var(--border);opacity:.38;}
+.dc.hmap{background:rgba(255,90,90,.32);}
 .dc.tm{outline:2px solid var(--accent2);outline-offset:1px;}
+
 .empty{text-align:center;padding:36px;color:var(--muted);}.empty .ei{font-size:2rem;margin-bottom:8px;}
 .toast{position:fixed;bottom:22px;right:22px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:11px 16px;font-size:.86rem;box-shadow:0 8px 28px rgba(0,0,0,.45);transform:translateY(60px);opacity:0;transition:all .3s;z-index:999;max-width:300px;}
 .toast.show{transform:translateY(0);opacity:1;}.toast.success{border-color:var(--green);}.toast.error{border-color:var(--red);}
+.readonly-badge{background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);border-radius:6px;padding:3px 10px;font-size:.75rem;color:var(--accent);}
 </style>
 </head>
 <body>
@@ -135,7 +138,7 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
 <div id="login-screen">
   <div class="login-card">
     <h1>Férias 2026</h1>
-    <p>Entra com a tua conta para gerir as férias</p>
+    <p>Entra com a tua conta para consultares as férias</p>
     <div class="field"><label>Utilizador</label>
       <select id="lu">
         <option value="">— Seleciona —</option>
@@ -151,7 +154,6 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
     <div class="field"><label>Password</label><input type="password" id="lp" placeholder="••••••"></div>
     <button class="btn-login" id="btn-in">Entrar</button>
     <div id="login-error">Credenciais incorretas. Tenta novamente.</div>
-    <div class="login-hint">Password de demonstração: <strong>1234</strong> para todos</div>
   </div>
 </div>
 
@@ -166,33 +168,31 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
   <main>
     <div class="tabs" id="tabs"></div>
 
+    <!-- MINHAS FÉRIAS (view própria) -->
     <div class="sec" id="sec-conta">
       <div class="card">
         <h2 id="ctitle">As Minhas Férias</h2>
         <div class="dboxes">
           <div class="dbox tot"><div class="num" id="dt">—</div><div class="lbl">Com direito</div></div>
-          <div class="dbox usd"><div class="num" id="du">—</div><div class="lbl">Pedidos</div></div>
+          <div class="dbox usd"><div class="num" id="du">—</div><div class="lbl">Marcados</div></div>
           <div class="dbox lft"><div class="num" id="dl">—</div><div class="lbl">Disponíveis</div></div>
         </div>
-        <div class="cal-head"><h3 id="clbl"></h3><div class="cnav"><button class="btn-nav" id="cprev">‹</button><button class="btn-nav" id="cnext">›</button></div></div>
-        <div class="cgrid" id="cal"></div>
+        <div class="cal-head"><h3 id="clbl-c"></h3>
+          <div class="cnav"><button class="btn-nav" id="cprev-c">‹</button><button class="btn-nav" id="cnext-c">›</button></div>
+        </div>
+        <div class="cgrid" id="cal-c"></div>
         <div class="legend">
-          <div class="li"><div class="ld" style="background:rgba(79,142,247,.45);border:1px solid var(--accent)"></div>Selecionado</div>
-          <div class="li"><div class="ld" style="background:rgba(247,201,79,.32)"></div>Pendente</div>
-          <div class="li"><div class="ld" style="background:rgba(46,204,138,.32)"></div>Aprovado</div>
-          <div class="li"><div class="ld" style="background:rgba(247,95,95,.22)"></div>Recusado</div>
+          <div class="li"><div class="ld" style="background:rgba(46,204,138,.32)"></div>Férias marcadas</div>
           <div class="li"><div class="ld" style="background:rgba(255,90,90,.18);border:1px solid rgba(255,90,90,.38)"></div>Feriado 🇵🇹</div>
         </div>
-        <div class="rform">
-          <h4>Pedir Férias</h4>
-          <div class="rinfo" id="rinfo">Clica nos dias do calendário para selecionar o período</div>
-          <button class="btn-sub" id="btn-sub" disabled>Enviar Pedido</button>
-          <button class="btn-clr" id="btn-clr">Limpar</button>
-        </div>
       </div>
-      <div class="card gap"><h2>Os Meus Pedidos</h2><div class="rlist" id="myreqs"></div></div>
+      <div class="card gap">
+        <h2>Períodos de Férias</h2>
+        <div class="days-list" id="my-periods"></div>
+      </div>
     </div>
 
+    <!-- MAPA GERAL -->
     <div class="sec" id="sec-mapa">
       <div class="card">
         <div class="map-head">
@@ -201,315 +201,298 @@ main{padding:24px;max-width:1300px;margin:0 auto;}
         </div>
         <div class="tcal"><table class="ttbl" id="ttbl"></table></div>
         <div class="legend" style="margin-top:12px">
-          <div class="li"><div class="ld" style="background:var(--green);opacity:.78"></div>Aprovado</div>
-          <div class="li"><div class="ld" style="background:var(--yellow);opacity:.62"></div>Pendente</div>
+          <div class="li"><div class="ld" style="background:var(--green);opacity:.8"></div>Férias</div>
           <div class="li"><div class="ld" style="background:var(--border)"></div>Fim-de-semana</div>
           <div class="li"><div class="ld" style="background:rgba(255,90,90,.35)"></div>Feriado 🇵🇹</div>
         </div>
       </div>
     </div>
 
+    <!-- GESTÃO (só Daniel) -->
     <div class="sec" id="sec-admin">
       <div style="margin-bottom:18px">
-        <h2 style="font-size:1.45rem;font-weight:700;margin-bottom:4px">Painel de Administração</h2>
-        <p style="color:var(--muted);font-size:.86rem">Gere os dias de férias e aprova os pedidos da equipa</p>
+        <h2 style="font-size:1.45rem;font-weight:700;margin-bottom:4px">Gestão de Férias</h2>
+        <p style="color:var(--muted);font-size:.86rem">Marca e gere as férias de toda a equipa</p>
       </div>
-      <div class="card" style="margin-bottom:16px"><h2>Dias com Direito — Equipa</h2><div class="admin-grid" id="agrid"></div></div>
-      <div class="card" style="margin-bottom:16px"><h2>Pedidos Pendentes</h2><div class="plist" id="pend"></div></div>
+
+      <!-- Selecionar pessoa -->
+      <div class="card" style="margin-bottom:16px">
+        <h2>Seleciona a Pessoa</h2>
+        <div class="person-bar" id="person-bar"></div>
+      </div>
+
+      <!-- Calendário de gestão -->
+      <div class="card" style="margin-bottom:16px" id="admin-cal-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div>
+            <h2 id="admin-cal-title" style="margin-bottom:4px">—</h2>
+            <div class="days-set-row">
+              <label>Dias com direito:</label>
+              <input type="number" id="days-input" min="0" max="60" value="22">
+              <button class="btn-set" id="btn-set-days">Guardar</button>
+              <span id="days-summary" style="font-size:.82rem;color:var(--muted)"></span>
+            </div>
+          </div>
+          <div class="cnav"><button class="btn-nav" id="cprev-a">‹</button><span id="clbl-a" style="font-weight:600;min-width:110px;text-align:center"></span><button class="btn-nav" id="cnext-a">›</button></div>
+        </div>
+        <div class="cgrid" id="cal-a"></div>
+        <div class="legend">
+          <div class="li"><div class="ld" style="background:rgba(46,204,138,.32)"></div>Férias marcadas</div>
+          <div class="li"><div class="ld" style="background:rgba(255,90,90,.18);border:1px solid rgba(255,90,90,.38)"></div>Feriado 🇵🇹</div>
+        </div>
+        <div class="edit-panel">
+          <h4>Marcar Férias</h4>
+          <div class="edit-info" id="edit-info">Clica nos dias do calendário para selecionar o período</div>
+          <div class="edit-actions">
+            <button class="btn-mark" id="btn-mark" disabled>✓ Marcar Férias</button>
+            <button class="btn-unmark" id="btn-unmark" disabled>✕ Remover Férias</button>
+            <button class="btn-clr" id="btn-clr">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Períodos marcados -->
       <div class="card">
-        <h2>Férias Aprovadas</h2>
-        <p style="color:var(--muted);font-size:.82rem;margin-bottom:13px">Podes reverter para pendente ou eliminar em caso de engano.</p>
-        <div class="plist" id="appr"></div>
+        <h2 id="admin-periods-title">Períodos Marcados</h2>
+        <div class="days-list" id="admin-periods"></div>
       </div>
     </div>
+
   </main>
 </div>
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// ── FIREBASE CONFIG ──────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyBUTriZ0TJgxM45V3Rcf9k0btQVWYlsgt4",
   authDomain: "ferias-9472e.firebaseapp.com",
-  databaseURL: "https://ferias-9472e-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "ferias-9472e",
   storageBucket: "ferias-9472e.firebasestorage.app",
   messagingSenderId: "718937309850",
-  appId: "1:718937309850:web:a3f7a5d8fdfe000c025523",
-  measurementId: "G-8108BTHDXK"
+  appId: "1:718937309850:web:a3f7a5d8fdfe000c025523"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ── CONSTANTS ────────────────────────────────────────────
-const USERS_CONFIG = {
-  daniel:   { name:'Daniel',   color:'#4f8ef7', admin:true,  pw:'1234', days:22 },
-  miguel:   { name:'Miguel',   color:'#7b61ff', admin:false, pw:'1234', days:22 },
-  ilona:    { name:'Ilona',    color:'#f75faa', admin:false, pw:'1234', days:22 },
-  eduardo:  { name:'Eduardo',  color:'#f7c94f', admin:false, pw:'1234', days:22 },
-  fernando: { name:'Fernando', color:'#2ecc8a', admin:false, pw:'1234', days:22 },
-  lara:     { name:'Lara',     color:'#f7854f', admin:false, pw:'1234', days:22 },
-  bruna:    { name:'Bruna',    color:'#5fe0f7', admin:false, pw:'1234', days:22 },
+// ── CONFIG ───────────────────────────────────────────────
+const USERS = {
+  daniel:   { name:'Daniel',   color:'#4f8ef7', pw:'4321' },
+  miguel:   { name:'Miguel',   color:'#7b61ff', pw:'1234' },
+  ilona:    { name:'Ilona',    color:'#f75faa', pw:'1234' },
+  eduardo:  { name:'Eduardo',  color:'#f7c94f', pw:'1234' },
+  fernando: { name:'Fernando', color:'#2ecc8a', pw:'1234' },
+  lara:     { name:'Lara',     color:'#f7854f', pw:'1234' },
+  bruna:    { name:'Bruna',    color:'#5fe0f7', pw:'1234' },
 };
 const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const DNAMES=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const FERIADOS={'2026-01-01':'Ano Novo','2026-02-17':'Carnaval','2026-04-03':'Sexta-feira Santa','2026-04-05':'Páscoa','2026-04-25':'Dia da Liberdade','2026-05-01':'Dia do Trabalhador','2026-05-14':'Corpo de Deus','2026-06-10':'Dia de Portugal','2026-08-15':'Assunção de N. Sra.','2026-10-05':'Implantação da República','2026-11-01':'Todos os Santos','2026-12-01':'Restauração da Independência','2026-12-08':'Imaculada Conceição','2026-12-25':'Natal'};
 
-// ── STATE ─────────────────────────────────────────────────
-let cu = null; // current user id
-let usersData = {}; // from Firestore
-let allRequests = [];
-let calY=2026, calM=new Date().getMonth(), mapY=2026, mapM=new Date().getMonth();
+// ── STATE ────────────────────────────────────────────────
+let cu=null, isAdmin=false;
+let usersData={}, allPeriods=[];
+let calYC=2026, calMC=new Date().getMonth();
+let mapY=2026, mapM=new Date().getMonth();
+let calYA=2026, calMA=new Date().getMonth();
 let selA=null, selB=null;
-let unsubRequests = null;
+let adminTarget=null;
+let unsub=null;
 
-// ── UTILS ─────────────────────────────────────────────────
-const pad = n => String(n).padStart(2,'0');
-const ds = (y,m,d) => `${y}-${pad(m+1)}-${pad(d)}`;
-const isFer = d => !!FERIADOS[d];
-const ferN = d => FERIADOS[d]||'';
-const ini = name => name.slice(0,2).toUpperCase();
-const colorFor = id => (usersData[id]||USERS_CONFIG[id]||{}).color || '#888';
-const nameOf = id => (usersData[id]||USERS_CONFIG[id]||{}).name || id;
-const daysOf = id => (usersData[id]||USERS_CONFIG[id]||{}).days || 22;
-
-function fmt(d) {
-  const p = d.split('-');
-  return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('pt-PT',{day:'2-digit',month:'short',year:'numeric'});
-}
-function wdays(a,b) {
-  let n=0;
-  const d = new Date(a.split('-')[0],+a.split('-')[1]-1,+a.split('-')[2]);
-  const e = new Date(b.split('-')[0],+b.split('-')[1]-1,+b.split('-')[2]);
-  while(d<=e){ const w=d.getDay(), s=ds(d.getFullYear(),d.getMonth(),d.getDate()); if(w>0&&w<6&&!isFer(s))n++; d.setDate(d.getDate()+1); }
+// ── UTILS ────────────────────────────────────────────────
+const pad=n=>String(n).padStart(2,'0');
+const ds=(y,m,d)=>`${y}-${pad(m+1)}-${pad(d)}`;
+const isFer=d=>!!FERIADOS[d];
+const ferN=d=>FERIADOS[d]||'';
+const ini=name=>name.slice(0,2).toUpperCase();
+const nameOf=id=>(USERS[id]||{}).name||id;
+const colorOf=id=>(USERS[id]||{}).color||'#888';
+function fmt(d){const p=d.split('-');return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('pt-PT',{day:'2-digit',month:'short',year:'numeric'});}
+function wdays(a,b){
+  let n=0,d=new Date(a.split('-')[0],+a.split('-')[1]-1,+a.split('-')[2]);
+  const e=new Date(b.split('-')[0],+b.split('-')[1]-1,+b.split('-')[2]);
+  while(d<=e){const w=d.getDay(),s=ds(d.getFullYear(),d.getMonth(),d.getDate());if(w>0&&w<6&&!isFer(s))n++;d.setDate(d.getDate()+1);}
   return n;
 }
-function toast(msg, type='success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `toast show ${type}`;
-  clearTimeout(t._t); t._t = setTimeout(()=>t.className='toast', 3500);
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast show ${type}`;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3500);
 }
-const hide = id => document.getElementById(id).style.display='none';
-const show = (id,disp='flex') => document.getElementById(id).style.display=disp;
 
-// ── INIT FIRESTORE USERS ──────────────────────────────────
-async function initUsers() {
-  for (const [id, cfg] of Object.entries(USERS_CONFIG)) {
-    const ref = doc(db, 'users', id);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-      await setDoc(ref, { name: cfg.name, color: cfg.color, admin: cfg.admin, days: cfg.days });
+// ── AUTH ─────────────────────────────────────────────────
+document.getElementById('btn-in').onclick=doLogin;
+document.getElementById('lp').onkeydown=e=>{if(e.key==='Enter')doLogin();};
+document.getElementById('btn-out').onclick=doLogout;
+
+function doLogin(){
+  const uid=document.getElementById('lu').value;
+  const pw=document.getElementById('lp').value;
+  if(!uid||!pw){showErr('Preenche todos os campos.');return;}
+  if(!USERS[uid]||pw!==USERS[uid].pw){showErr('Credenciais incorretas.');return;}
+  cu=uid; isAdmin=(uid==='daniel');
+  localStorage.setItem('ferias_user',uid);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  initApp();
+}
+function showErr(msg){
+  const el=document.getElementById('login-error');
+  el.textContent=msg;el.style.display='block';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',4000);
+}
+function doLogout(){
+  cu=null;isAdmin=false;selA=null;selB=null;adminTarget=null;
+  localStorage.removeItem('ferias_user');
+  if(unsub){unsub();unsub=null;}
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('lu').value='';document.getElementById('lp').value='';
+}
+
+// ── INIT ─────────────────────────────────────────────────
+async function loadUsersData(){
+  const snap=await getDocs(collection(db,'users'));
+  snap.forEach(d=>{usersData[d.id]=d.data();});
+  // init missing
+  for(const[id]of Object.entries(USERS)){
+    if(!usersData[id]){
+      await setDoc(doc(db,'users',id),{days:22});
+      usersData[id]={days:22};
     }
   }
 }
 
-async function loadUsers() {
-  const snap = await getDocs(collection(db, 'users'));
-  snap.forEach(d => { usersData[d.id] = d.data(); });
-}
+function initApp(){
+  const cfg=USERS[cu];
+  const av=document.getElementById('hav');
+  av.textContent=ini(cfg.name);av.style.background=cfg.color;av.style.color='#fff';
+  document.getElementById('hname').textContent=cfg.name;
 
-// ── AUTH ──────────────────────────────────────────────────
-document.getElementById('btn-in').onclick = doLogin;
-document.getElementById('lp').onkeydown = e => { if(e.key==='Enter') doLogin(); };
-document.getElementById('btn-out').onclick = doLogout;
-
-async function doLogin() {
-  const uid = document.getElementById('lu').value;
-  const pw = document.getElementById('lp').value;
-  if(!uid||!pw){ showErr('Preenche todos os campos.'); return; }
-  const cfg = USERS_CONFIG[uid];
-  if(!cfg || pw !== cfg.pw){ showErr('Credenciais incorretas.'); return; }
-  cu = uid;
-  localStorage.setItem('ferias_user', uid);
-  hide('login-screen');
-  show('app','block');
-  await loadUsers();
-  initApp();
-}
-
-function showErr(msg) {
-  const el = document.getElementById('login-error');
-  el.textContent=msg; el.style.display='block';
-  clearTimeout(el._t); el._t=setTimeout(()=>el.style.display='none',4000);
-}
-
-function doLogout() {
-  cu=null; selA=null; selB=null;
-  localStorage.removeItem('ferias_user');
-  if(unsubRequests){ unsubRequests(); unsubRequests=null; }
-  hide('app'); show('login-screen');
-  document.getElementById('lu').value='';
-  document.getElementById('lp').value='';
-}
-
-// ── APP ───────────────────────────────────────────────────
-function initApp() {
-  const cfg = USERS_CONFIG[cu];
-  const av = document.getElementById('hav');
-  av.textContent=ini(cfg.name); av.style.background=cfg.color; av.style.color='#fff';
-  document.getElementById('hname').textContent=cfg.name+(cfg.admin?' 👑':'');
-
-  const tabsEl = document.getElementById('tabs'); tabsEl.innerHTML='';
-  const tdefs = [{id:'conta',lbl:'As Minhas Férias'},{id:'mapa',lbl:'Mapa da Equipa'}];
-  if(cfg.admin) tdefs.push({id:'admin',lbl:'⚙ Administração'});
+  const tabsEl=document.getElementById('tabs');tabsEl.innerHTML='';
+  const tdefs=[{id:'conta',lbl:'As Minhas Férias'},{id:'mapa',lbl:'Mapa da Equipa'}];
+  if(isAdmin)tdefs.push({id:'admin',lbl:'Gestão de Férias'});
   tdefs.forEach((t,i)=>{
     const b=document.createElement('button');
-    b.className='tab'+(i===0?' active':''); b.textContent=t.lbl; b.dataset.id=t.id;
+    b.className='tab'+(i===0?' active':'');b.textContent=t.lbl;b.dataset.id=t.id;
     b.onclick=()=>switchTab(t.id);
     tabsEl.appendChild(b);
   });
 
-  document.getElementById('cprev').onclick=()=>adjCal(-1);
-  document.getElementById('cnext').onclick=()=>adjCal(1);
-  document.getElementById('mprev').onclick=()=>adjMap(-1);
-  document.getElementById('mnext').onclick=()=>adjMap(1);
-  document.getElementById('btn-sub').onclick=submitReq;
-  document.getElementById('btn-clr').onclick=clearSel;
+  document.getElementById('cprev-c').onclick=()=>{calMC--;if(calMC<0){calMC=11;calYC--;}renderCalC();};
+  document.getElementById('cnext-c').onclick=()=>{calMC++;if(calMC>11){calMC=0;calYC++;}renderCalC();};
+  document.getElementById('mprev').onclick=()=>{mapM--;if(mapM<0){mapM=11;mapY--;}renderMapa();};
+  document.getElementById('mnext').onclick=()=>{mapM++;if(mapM>11){mapM=0;mapY++;}renderMapa();};
+  document.getElementById('cprev-a').onclick=()=>{calMA--;if(calMA<0){calMA=11;calYA--;}renderCalA();};
+  document.getElementById('cnext-a').onclick=()=>{calMA++;if(calMA>11){calMA=0;calYA++;}renderCalA();};
+  document.getElementById('btn-mark').onclick=markPeriod;
+  document.getElementById('btn-unmark').onclick=unmarkPeriod;
+  document.getElementById('btn-clr').onclick=()=>{selA=null;selB=null;renderCalA();};
+  document.getElementById('btn-set-days').onclick=saveDays;
 
-  // Real-time listener for requests
-  if(unsubRequests) unsubRequests();
-  unsubRequests = onSnapshot(collection(db,'requests'), snap => {
-    allRequests = snap.docs.map(d=>({id:d.id,...d.data()}));
-    const active = document.querySelector('.tab.active');
-    if(active) {
-      const tid = active.dataset.id;
-      if(tid==='conta') renderConta();
-      if(tid==='mapa') renderMapa();
-      if(tid==='admin') renderAdmin();
+  if(unsub)unsub();
+  unsub=onSnapshot(collection(db,'periods'),snap=>{
+    allPeriods=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const active=document.querySelector('.tab.active');
+    if(active){
+      const tid=active.dataset.id;
+      if(tid==='conta')renderConta();
+      if(tid==='mapa')renderMapa();
+      if(tid==='admin')renderAdmin();
     }
   });
 
   switchTab('conta');
 }
 
-function switchTab(id) {
+function switchTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.id===id));
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   document.getElementById('sec-'+id).classList.add('on');
-  if(id==='conta') renderConta();
-  if(id==='mapa') renderMapa();
-  if(id==='admin') renderAdmin();
+  if(id==='conta')renderConta();
+  if(id==='mapa')renderMapa();
+  if(id==='admin')renderAdmin();
 }
 
-// ── CONTA ─────────────────────────────────────────────────
-function renderConta() {
+// ── CONTA (readonly para todos) ──────────────────────────
+function renderConta(){
   document.getElementById('ctitle').textContent='As Minhas Férias — '+nameOf(cu);
-  const tot = daysOf(cu);
-  const used = allRequests.filter(r=>r.userId===cu&&r.status!=='rejected').reduce((s,r)=>s+r.workDays,0);
+  const tot=(usersData[cu]||{}).days||22;
+  const myP=allPeriods.filter(p=>p.userId===cu);
+  const used=myP.reduce((s,p)=>s+p.workDays,0);
   document.getElementById('dt').textContent=tot;
   document.getElementById('du').textContent=used;
   document.getElementById('dl').textContent=Math.max(0,tot-used);
-  renderCal(); renderMyReqs();
+  renderCalC();
+  renderMyPeriods();
 }
 
-function renderCal() {
-  document.getElementById('clbl').textContent=`${MONTHS[calM]} ${calY}`;
-  const cal=document.getElementById('cal'); cal.innerHTML='';
+function renderCalC(){
+  document.getElementById('clbl-c').textContent=`${MONTHS[calMC]} ${calYC}`;
+  renderCalGeneric('cal-c', calYC, calMC, cu, false);
+}
+
+function renderMyPeriods(){
+  const cont=document.getElementById('my-periods');
+  const mine=allPeriods.filter(p=>p.userId===cu).sort((a,b)=>a.startDate.localeCompare(b.startDate));
+  if(!mine.length){cont.innerHTML='<div class="empty"><div class="ei">🗓️</div>Ainda não tens férias marcadas</div>';return;}
+  cont.innerHTML=mine.map(p=>`
+    <div class="ditem">
+      <div style="flex:1">
+        <div class="ditem-dates">${fmt(p.startDate)}${p.startDate!==p.endDate?' → '+fmt(p.endDate):''}</div>
+        <div class="ditem-count">${p.workDays} dia(s) útil(eis)</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── CALENDAR GENERIC ─────────────────────────────────────
+function renderCalGeneric(elId, y, m, userId, editable){
+  const cal=document.getElementById(elId);cal.innerHTML='';
   DNAMES.forEach(n=>{const e=document.createElement('div');e.className='cdn';e.textContent=n;cal.appendChild(e);});
-  const first=new Date(calY,calM,1).getDay();
-  const dim=new Date(calY,calM+1,0).getDate();
-  const today=new Date(); today.setHours(0,0,0,0);
+  const first=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate();
+  const today=new Date();today.setHours(0,0,0,0);
   const todayStr=ds(today.getFullYear(),today.getMonth(),today.getDate());
-  const myReqs=allRequests.filter(r=>r.userId===cu);
+  const userP=allPeriods.filter(p=>p.userId===userId);
   for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cd emp';cal.appendChild(e);}
   for(let d=1;d<=dim;d++){
-    const dayStr=ds(calY,calM,d);
-    const dw=new Date(calY,calM,d).getDay();
-    const e=document.createElement('div'); e.className='cd';
-    const ns=document.createElement('span'); ns.textContent=d; e.appendChild(ns);
-    if(dayStr===todayStr) e.classList.add('tr');
-    if(dw===0||dw===6){ e.classList.add('wk'); }
+    const dayStr=ds(y,m,d), dw=new Date(y,m,d).getDay();
+    const e=document.createElement('div');e.className='cd';
+    const ns=document.createElement('span');ns.textContent=d;e.appendChild(ns);
+    if(dayStr===todayStr)e.classList.add('tr');
+    if(dw===0||dw===6){e.classList.add('wk');}
     else if(isFer(dayStr)){
       e.classList.add('hol');
       const dot=document.createElement('div');dot.className='hdot';e.appendChild(dot);
       const tip=document.createElement('div');tip.className='htip';tip.textContent=ferN(dayStr);e.appendChild(tip);
-    } else if(new Date(calY,calM,d)<today){ e.classList.add('past'); }
-    else {
-      let st=null;
-      for(const r of myReqs){ if(dayStr>=r.startDate&&dayStr<=r.endDate){st=r.status;break;} }
-      if(st){ e.classList.add(st); }
-      else {
-        if(selA&&selB){const lo=selA<selB?selA:selB,hi=selA<selB?selB:selA;if(dayStr>=lo&&dayStr<=hi)e.classList.add('sel');}
-        else if(selA===dayStr) e.classList.add('sel');
-        e.onclick=()=>onDayClick(dayStr);
+    } else if(new Date(y,m,d)<today&&!editable){
+      e.classList.add('past');
+    } else {
+      const isMarked=userP.some(p=>dayStr>=p.startDate&&dayStr<=p.endDate);
+      if(isMarked) e.classList.add('marked');
+      if(editable){
+        e.classList.add('clickable');
+        if(selA&&selB){const lo=selA<selB?selA:selB,hi=selA<selB?selB:selA;if(dayStr>=lo&&dayStr<=hi&&!isMarked)e.style.background='rgba(79,142,247,.15)',e.style.borderColor='var(--accent)';}
+        else if(selA===dayStr){e.style.background='rgba(79,142,247,.15)';e.style.borderColor='var(--accent)';}
+        e.onclick=()=>{
+          if(!selA){selA=dayStr;selB=null;}
+          else if(!selB){if(dayStr===selA)selA=null;else if(dayStr<selA){selB=selA;selA=dayStr;}else selB=dayStr;}
+          else{selA=dayStr;selB=null;}
+          updateEditInfo();renderCalA();
+        };
       }
     }
     cal.appendChild(e);
   }
-  updateRinfo();
 }
 
-function onDayClick(d) {
-  if(!selA){selA=d;selB=null;}
-  else if(!selB){if(d===selA)selA=null;else if(d<selA){selB=selA;selA=d;}else selB=d;}
-  else{selA=d;selB=null;}
-  renderCal();
-}
-
-function updateRinfo() {
-  const el=document.getElementById('rinfo'), btn=document.getElementById('btn-sub');
-  if(!selA){el.innerHTML='Clica nos dias do calendário para selecionar o período';btn.disabled=true;return;}
-  const lo=(!selB||selA<selB)?selA:selB, hi=(!selB||selA<selB)?(selB||selA):selA;
-  const wd=wdays(lo,hi);
-  el.innerHTML=`<span>${fmt(lo)}</span>${hi!==lo?' &rarr; <span>'+fmt(hi)+'</span>':''} &nbsp;&middot;&nbsp; <strong>${wd} dia(s) útil(eis)</strong>`;
-  btn.disabled=wd===0;
-}
-
-function clearSel(){selA=null;selB=null;renderCal();}
-
-async function submitReq() {
-  if(!selA) return;
-  const lo=(!selB||selA<selB)?selA:selB, hi=(!selB||selA<selB)?(selB||selA):selA;
-  const days=wdays(lo,hi);
-  const tot=daysOf(cu);
-  const used=allRequests.filter(r=>r.userId===cu&&r.status!=='rejected').reduce((s,r)=>s+r.workDays,0);
-  if(used+days>tot){toast('Não tens dias suficientes disponíveis!','error');return;}
-  const btn=document.getElementById('btn-sub');
-  btn.disabled=true; btn.textContent='A enviar...';
-  try {
-    await addDoc(collection(db,'requests'),{
-      userId:cu, startDate:lo, endDate:hi, workDays:days,
-      status:'pending', createdAt:new Date().toISOString()
-    });
-    selA=null; selB=null;
-    toast('Pedido enviado! Aguarda aprovação do Daniel. ✓');
-  } catch(e){ toast('Erro ao enviar pedido.','error'); }
-  btn.disabled=false; btn.textContent='Enviar Pedido';
-}
-
-function renderMyReqs() {
-  const cont=document.getElementById('myreqs');
-  const mine=allRequests.filter(r=>r.userId===cu).sort((a,b)=>b.createdAt?.localeCompare(a.createdAt));
-  if(!mine.length){cont.innerHTML='<div class="empty"><div class="ei">🗓️</div>Ainda não fizeste nenhum pedido</div>';return;}
-  cont.innerHTML=mine.map(r=>`
-    <div class="ritem">
-      <div class="rdates"><div class="dr">${fmt(r.startDate)}${r.startDate!==r.endDate?' &rarr; '+fmt(r.endDate):''}</div>
-      <div class="dc2">${r.workDays} dia(s) útil(eis)</div></div>
-      <span class="badge ${r.status}">${r.status==='pending'?'⏳ Pendente':r.status==='approved'?'✓ Aprovado':'✕ Recusado'}</span>
-      ${r.status==='pending'?`<button class="btn-sm" onclick="window._cancelReq('${r.id}')">Cancelar</button>`:''}
-    </div>`).join('');
-}
-
-window._cancelReq = async id => {
-  if(!confirm('Tens a certeza que queres cancelar este pedido?')) return;
-  try{ await deleteDoc(doc(db,'requests',id)); toast('Pedido cancelado.','error'); }
-  catch(e){ toast('Erro.','error'); }
-};
-
-const adjCal = d => { calM+=d; if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;} renderCal(); };
-
-// ── MAPA ──────────────────────────────────────────────────
-function renderMapa() {
+// ── MAPA ─────────────────────────────────────────────────
+function renderMapa(){
   document.getElementById('mlbl').textContent=`${MONTHS[mapM]} ${mapY}`;
   const tbl=document.getElementById('ttbl');
   const dim=new Date(mapY,mapM+1,0).getDate();
   const today=new Date();
-  const userIds=Object.keys(USERS_CONFIG);
   let html='<thead><tr><th class="pc">Pessoa</th>';
   for(let d=1;d<=dim;d++){
     const dstr=ds(mapY,mapM,d),dw=new Date(mapY,mapM,d).getDay(),isH=isFer(dstr);
@@ -517,116 +500,147 @@ function renderMapa() {
     html+=`<th style="${sty}"${isH?` title="${ferN(dstr)}"`:''}>${d}${isH?'<br><span style="font-size:.55rem">🇵🇹</span>':''}</th>`;
   }
   html+='</tr></thead><tbody>';
-  userIds.forEach(uid=>{
-    const uname=nameOf(uid), ucol=colorFor(uid);
+  Object.keys(USERS).forEach(uid=>{
     html+=`<tr><td class="pnc"><div style="display:flex;align-items:center;gap:6px">
-      <div style="width:20px;height:20px;border-radius:50%;background:${ucol};color:#fff;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex-shrink:0">${ini(uname)}</div>
-      ${uname}</div></td>`;
+      <div style="width:20px;height:20px;border-radius:50%;background:${colorOf(uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;flex-shrink:0">${ini(nameOf(uid))}</div>
+      ${nameOf(uid)}</div></td>`;
     for(let d=1;d<=dim;d++){
       const dstr=ds(mapY,mapM,d),dw=new Date(mapY,mapM,d).getDay();
       const isTd=new Date(mapY,mapM,d).toDateString()===today.toDateString(),isH=isFer(dstr);
       let cls='';
       if(dw===0||dw===6)cls='weekend';
       else if(isH)cls='hmap';
-      else{const req=allRequests.find(r=>r.userId===uid&&dstr>=r.startDate&&dstr<=r.endDate);if(req)cls=req.status;}
-      html+=`<td><div class="dc ${cls}${isTd?' tm':''}" title="${isH?ferN(dstr):uname+' — '+fmt(dstr)}"></div></td>`;
+      else if(allPeriods.some(p=>p.userId===uid&&dstr>=p.startDate&&dstr<=p.endDate))cls='marked';
+      html+=`<td><div class="dc ${cls}${isTd?' tm':''}" title="${isH?ferN(dstr):nameOf(uid)+' — '+fmt(dstr)}"></div></td>`;
     }
     html+='</tr>';
   });
-  html+='</tbody>'; tbl.innerHTML=html;
-}
-const adjMap = d => { mapM+=d; if(mapM<0){mapM=11;mapY--;}if(mapM>11){mapM=0;mapY++;} renderMapa(); };
-
-// ── ADMIN ─────────────────────────────────────────────────
-function renderAdmin() {
-  if(!USERS_CONFIG[cu]?.admin) return;
-  renderAdminTeam(); renderPending(); renderApproved();
+  html+='</tbody>';tbl.innerHTML=html;
 }
 
-function renderAdminTeam() {
-  const grid=document.getElementById('agrid');
-  grid.innerHTML=Object.entries(USERS_CONFIG).map(([uid,cfg])=>{
-    const tot=daysOf(uid);
-    const used=allRequests.filter(r=>r.userId===uid&&r.status!=='rejected').reduce((s,r)=>s+r.workDays,0);
-    const pct=tot>0?Math.round(used/tot*100):0;
-    return `<div class="mcard"><div class="mhead">
-      <div style="width:34px;height:34px;border-radius:50%;background:${cfg.color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0">${ini(cfg.name)}</div>
-      <div><div class="mname">${cfg.name}${cfg.admin?' 👑':''}</div><div class="msub">${used}/${tot} dias</div></div></div>
-      <div class="dset"><span>Dias:</span><input type="number" id="di-${uid}" value="${tot}" min="0" max="60">
-      <button class="btn-save" onclick="window._saveDays('${uid}')">Guardar</button></div>
-      <div class="mbar"><div class="mbar-f" style="width:${pct}%"></div></div></div>`;
-  }).join('');
+// ── ADMIN ────────────────────────────────────────────────
+function renderAdmin(){
+  if(!isAdmin)return;
+  // build person bar
+  const bar=document.getElementById('person-bar');
+  bar.innerHTML='<span>Pessoa:</span>';
+  Object.entries(USERS).forEach(([uid,cfg])=>{
+    const b=document.createElement('button');
+    b.className='pbtn'+(adminTarget===uid?' active':'');
+    if(adminTarget===uid)b.style.borderColor=cfg.color;
+    b.innerHTML=`<div class="pav" style="background:${cfg.color};color:#fff">${ini(cfg.name)}</div>${cfg.name}`;
+    b.onclick=()=>{adminTarget=uid;selA=null;selB=null;renderAdmin();};
+    bar.appendChild(b);
+  });
+  if(!adminTarget){
+    document.getElementById('admin-cal-title').textContent='— Seleciona uma pessoa —';
+    document.getElementById('admin-periods').innerHTML='<div class="empty"><div class="ei">👆</div>Seleciona uma pessoa acima</div>';
+    document.getElementById('admin-periods-title').textContent='Períodos Marcados';
+    return;
+  }
+  // title & days
+  const tot=(usersData[adminTarget]||{}).days||22;
+  const used=allPeriods.filter(p=>p.userId===adminTarget).reduce((s,p)=>s+p.workDays,0);
+  document.getElementById('admin-cal-title').textContent=`Férias — ${nameOf(adminTarget)}`;
+  document.getElementById('days-input').value=tot;
+  document.getElementById('days-summary').textContent=`${used} marcados · ${Math.max(0,tot-used)} disponíveis`;
+  document.getElementById('admin-periods-title').textContent=`Períodos Marcados — ${nameOf(adminTarget)}`;
+  renderCalA();
+  renderAdminPeriods();
 }
 
-window._saveDays = async uid => {
-  const v=parseInt(document.getElementById(`di-${uid}`).value);
-  if(isNaN(v)||v<0) return;
+function renderCalA(){
+  document.getElementById('clbl-a').textContent=`${MONTHS[calMA]} ${calYA}`;
+  if(!adminTarget)return;
+  renderCalGeneric('cal-a',calYA,calMA,adminTarget,true);
+  updateEditInfo();
+}
+
+function updateEditInfo(){
+  const el=document.getElementById('edit-info');
+  const btnM=document.getElementById('btn-mark');
+  const btnU=document.getElementById('btn-unmark');
+  if(!selA){el.innerHTML='Clica nos dias do calendário para selecionar o período';btnM.disabled=true;btnU.disabled=true;return;}
+  const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
+  const wd=wdays(lo,hi);
+  el.innerHTML=`<span>${fmt(lo)}</span>${hi!==lo?' → <span>'+fmt(hi)+'</span>':''} &nbsp;·&nbsp; <strong>${wd} dia(s) útil(eis)</strong>`;
+  btnM.disabled=wd===0;btnU.disabled=wd===0;
+}
+
+async function markPeriod(){
+  if(!selA||!adminTarget)return;
+  const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
+  const days=wdays(lo,hi);
+  const tot=(usersData[adminTarget]||{}).days||22;
+  const used=allPeriods.filter(p=>p.userId===adminTarget).reduce((s,p)=>s+p.workDays,0);
+  if(used+days>tot){toast(`${nameOf(adminTarget)} não tem dias suficientes!`,'error');return;}
+  const btn=document.getElementById('btn-mark');btn.disabled=true;btn.textContent='A guardar...';
   try{
-    await setDoc(doc(db,'users',uid),{...usersData[uid], days:v});
-    usersData[uid] = {...(usersData[uid]||USERS_CONFIG[uid]), days:v};
-    toast(`Dias de ${nameOf(uid)} atualizados para ${v}.`);
-    renderAdminTeam();
-  }catch(e){toast('Erro.','error');}
-};
-
-function renderPending() {
-  const cont=document.getElementById('pend');
-  const pend=allRequests.filter(r=>r.status==='pending');
-  if(!pend.length){cont.innerHTML='<div class="empty"><div class="ei">✅</div>Sem pedidos pendentes</div>';return;}
-  cont.innerHTML=pend.map(r=>`
-    <div class="pitem"><div class="pperson">
-      <div style="width:28px;height:28px;border-radius:50%;background:${colorFor(r.userId)};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.65rem;flex-shrink:0">${ini(nameOf(r.userId))}</div>
-      <div class="pinfo"><div class="pn">${nameOf(r.userId)}</div>
-      <div class="pd">${fmt(r.startDate)}${r.startDate!==r.endDate?' &rarr; '+fmt(r.endDate):''} &middot; ${r.workDays} dia(s)</div></div></div>
-      <div class="abtns">
-        <button class="btn-ap" onclick="window._setStatus('${r.id}','approved')">✓ Aprovar</button>
-        <button class="btn-rj" onclick="window._setStatus('${r.id}','rejected')">✕ Recusar</button>
-      </div></div>`).join('');
+    await addDoc(collection(db,'periods'),{userId:adminTarget,startDate:lo,endDate:hi,workDays:days,createdAt:new Date().toISOString()});
+    selA=null;selB=null;
+    toast(`Férias de ${nameOf(adminTarget)} marcadas! ✓`);
+  }catch(e){toast('Erro ao guardar.','error');}
+  btn.disabled=false;btn.textContent='✓ Marcar Férias';
 }
 
-function renderApproved() {
-  const cont=document.getElementById('appr');
-  const appr=allRequests.filter(r=>r.status==='approved').sort((a,b)=>a.userId.localeCompare(b.userId));
-  if(!appr.length){cont.innerHTML='<div class="empty"><div class="ei">📋</div>Sem férias aprovadas ainda</div>';return;}
-  cont.innerHTML=appr.map(r=>`
-    <div class="pitem"><div class="pperson">
-      <div style="width:28px;height:28px;border-radius:50%;background:${colorFor(r.userId)};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.65rem;flex-shrink:0">${ini(nameOf(r.userId))}</div>
-      <div class="pinfo"><div class="pn">${nameOf(r.userId)}</div>
-      <div class="pd">${fmt(r.startDate)}${r.startDate!==r.endDate?' &rarr; '+fmt(r.endDate):''} &middot; ${r.workDays} dia(s)</div></div></div>
-      <span class="badge approved" style="margin-right:auto">✓ Aprovado</span>
-      <div class="abtns">
-        <button class="btn-un" onclick="window._setStatus('${r.id}','pending')">↩ Reverter</button>
-        <button class="btn-del" onclick="window._deleteReq('${r.id}','${nameOf(r.userId)}')">🗑 Eliminar</button>
-      </div></div>`).join('');
-}
-
-window._setStatus = async (id, status) => {
+async function unmarkPeriod(){
+  if(!selA||!adminTarget)return;
+  const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
+  // find overlapping periods
+  const toDelete=allPeriods.filter(p=>p.userId===adminTarget&&p.endDate>=lo&&p.startDate<=hi);
+  if(!toDelete.length){toast('Não há férias marcadas nesse período.','error');return;}
+  if(!confirm(`Vais remover ${toDelete.length} período(s) de férias de ${nameOf(adminTarget)}. Confirmas?`))return;
   try{
-    await updateDoc(doc(db,'requests',id),{status});
-    const msgs={approved:'Férias aprovadas! ✓',rejected:'Pedido recusado.',pending:'Revertido para pendente.'};
-    toast(msgs[status], status==='approved'?'success':'error');
+    for(const p of toDelete) await deleteDoc(doc(db,'periods',p.id));
+    selA=null;selB=null;
+    toast(`Férias de ${nameOf(adminTarget)} removidas.`,'error');
   }catch(e){toast('Erro.','error');}
+}
+
+async function saveDays(){
+  if(!adminTarget)return;
+  const v=parseInt(document.getElementById('days-input').value);
+  if(isNaN(v)||v<0)return;
+  try{
+    await setDoc(doc(db,'users',adminTarget),{days:v});
+    usersData[adminTarget]={...usersData[adminTarget],days:v};
+    toast(`Dias de ${nameOf(adminTarget)} atualizados para ${v}.`);
+    renderAdmin();
+  }catch(e){toast('Erro.','error');}
+}
+
+function renderAdminPeriods(){
+  const cont=document.getElementById('admin-periods');
+  const mine=allPeriods.filter(p=>p.userId===adminTarget).sort((a,b)=>a.startDate.localeCompare(b.startDate));
+  if(!mine.length){cont.innerHTML='<div class="empty"><div class="ei">🗓️</div>Sem férias marcadas</div>';return;}
+  cont.innerHTML=mine.map(p=>`
+    <div class="ditem">
+      <div style="flex:1">
+        <div class="ditem-dates">${fmt(p.startDate)}${p.startDate!==p.endDate?' → '+fmt(p.endDate):''}</div>
+        <div class="ditem-count">${p.workDays} dia(s) útil(eis)</div>
+      </div>
+      <button class="btn-sm-del" onclick="window._delPeriod('${p.id}')">🗑 Remover</button>
+    </div>`).join('');
+}
+
+window._delPeriod=async id=>{
+  if(!confirm('Confirmas que queres remover este período de férias?'))return;
+  try{await deleteDoc(doc(db,'periods',id));toast('Período removido.','error');}
+  catch(e){toast('Erro.','error');}
 };
 
-window._deleteReq = async (id, name) => {
-  if(!confirm(`Confirmas que queres eliminar as férias de ${name}?\n\nEsta ação não pode ser desfeita.`)) return;
-  try{ await deleteDoc(doc(db,'requests',id)); toast('Férias eliminadas.','error'); }
-  catch(e){ toast('Erro.','error'); }
-};
-
-// ── STARTUP ───────────────────────────────────────────────
-(async () => {
-  await initUsers();
-  await loadUsers();
-  hide('loading');
-  const saved = localStorage.getItem('ferias_user');
-  if(saved && USERS_CONFIG[saved]){
-    cu=saved;
-    hide('login-screen');
-    show('app','block');
+// ── STARTUP ──────────────────────────────────────────────
+(async()=>{
+  await loadUsersData();
+  document.getElementById('loading').style.display='none';
+  const saved=localStorage.getItem('ferias_user');
+  if(saved&&USERS[saved]){
+    cu=saved;isAdmin=(saved==='daniel');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
     initApp();
   } else {
-    show('login-screen');
+    document.getElementById('login-screen').style.display='flex';
   }
 })();
 </script>
