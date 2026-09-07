@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Mapa de Férias 2026</title>
 <style>
 :root{
@@ -348,7 +351,7 @@ const FERIADOS={
 // ── STATE ────────────────────────────────────────────────
 let cu=null, isAdmin=false;
 let usersData={}, allPeriods=[];
-let selA=null, selB=null, adminTarget=null, unsub=null;
+let selA=null, selB=null, adminTarget=null, unsub=null, unsubUsers=null;
 
 // ── UTILS ────────────────────────────────────────────────
 const pad=n=>String(n).padStart(2,'0');
@@ -415,6 +418,7 @@ function doLogout(){
   cu=null;isAdmin=false;selA=null;selB=null;adminTarget=null;
   localStorage.removeItem('ferias_user');
   if(unsub){unsub();unsub=null;}
+  if(unsubUsers){unsubUsers();unsubUsers=null;}
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('lu').value='';document.getElementById('lp').value='';
@@ -458,6 +462,21 @@ function initApp(){
       const tid=active.dataset.id;
       if(tid==='conta')renderConta();
       if(tid==='mapa')renderMapa();
+      if(tid==='admin')renderAdmin();
+    }
+  });
+
+  // Mantém "usersData" (dias totais por pessoa) sempre sincronizado com o
+  // Firestore, em tempo real. Sem isto, uma sessão/separador antigo aberto
+  // ficava com um valor "congelado" em memória e podia reescrever por cima
+  // de uma alteração recente feita noutra sessão.
+  if(unsubUsers)unsubUsers();
+  unsubUsers=onSnapshot(collection(db,'users'),snap=>{
+    snap.forEach(d=>{usersData[d.id]=d.data();});
+    const active=document.querySelector('.tab.active');
+    if(active){
+      const tid=active.dataset.id;
+      if(tid==='conta')renderConta();
       if(tid==='admin')renderAdmin();
     }
   });
