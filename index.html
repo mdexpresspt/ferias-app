@@ -306,6 +306,10 @@ main{padding:24px;max-width:1400px;margin:0 auto;}
         <h2 id="admin-periods-title">Períodos Marcados</h2>
         <div class="periods-list" id="admin-periods"></div>
       </div>
+      <div class="card gap" id="admin-history-card">
+        <h2>📜 Histórico de Alterações</h2>
+        <div class="periods-list" id="admin-history"></div>
+      </div>
     </div>
   </main>
 </div>
@@ -313,7 +317,7 @@ main{padding:24px;max-width:1400px;margin:0 auto;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDocs, setDoc, addDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, getDocs, setDoc, addDoc, deleteDoc, collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBUTriZ0TJgxM45V3Rcf9k0btQVWYlsgt4",
@@ -350,8 +354,8 @@ const FERIADOS={
 
 // ── STATE ────────────────────────────────────────────────
 let cu=null, isAdmin=false;
-let usersData={}, allPeriods=[];
-let selA=null, selB=null, adminTarget=null, unsub=null, unsubUsers=null;
+let usersData={}, allPeriods=[], allHistory=[];
+let selA=null, selB=null, adminTarget=null, unsub=null, unsubUsers=null, unsubHistory=null;
 
 // ── UTILS ────────────────────────────────────────────────
 const pad=n=>String(n).padStart(2,'0');
@@ -419,6 +423,7 @@ function doLogout(){
   localStorage.removeItem('ferias_user');
   if(unsub){unsub();unsub=null;}
   if(unsubUsers){unsubUsers();unsubUsers=null;}
+  if(unsubHistory){unsubHistory();unsubHistory=null;}
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('lu').value='';document.getElementById('lp').value='';
@@ -480,6 +485,17 @@ function initApp(){
       if(tid==='admin')renderAdmin();
     }
   });
+
+  // Histórico de alterações — só o admin vê isto
+  if(unsubHistory){unsubHistory();unsubHistory=null;}
+  if(isAdmin){
+    const hq=query(collection(db,'historico'),orderBy('ts','desc'),limit(100));
+    unsubHistory=onSnapshot(hq,snap=>{
+      allHistory=snap.docs.map(d=>({id:d.id,...d.data()}));
+      const active=document.querySelector('.tab.active');
+      if(active&&active.dataset.id==='admin')renderHistory();
+    });
+  }
 
   switchTab('conta');
 }
@@ -685,6 +701,8 @@ function renderAdmin(){
     bar.appendChild(b);
   });
 
+  renderHistory();
+
   const calCard=document.getElementById('admin-cal-card');
   const perCard=document.getElementById('admin-periods-card');
   if(!adminTarget){calCard.style.display='none';perCard.style.display='none';return;}
@@ -704,6 +722,38 @@ function renderCalAdmin(){
   renderAnnualCal('cal-admin',adminTarget,true);
 }
 
+// ── HISTÓRICO ────────────────────────────────────────────
+async function logHistory(action,targetUserId,details){
+  try{
+    await addDoc(collection(db,'historico'),{
+      ts:Date.now(),
+      adminId:cu,
+      adminName:nameOf(cu),
+      targetUser:targetUserId,
+      targetName:nameOf(targetUserId),
+      action,
+      details
+    });
+  }catch(e){/* não bloquear a ação principal se o log falhar */}
+}
+
+function renderHistory(){
+  const cont=document.getElementById('admin-history');
+  if(!cont)return;
+  if(!allHistory.length){cont.innerHTML='<div class="empty"><div class="ei">📜</div>Ainda não há alterações registadas</div>';return;}
+  cont.innerHTML=allHistory.map(h=>{
+    const when=new Date(h.ts).toLocaleString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `
+    <div class="prd-item">
+      <div style="flex:1">
+        <div class="dr">${h.action} — <span style="color:${colorOf(h.targetUser)}">${h.targetName}</span></div>
+        <div class="dc2">${h.details}</div>
+      </div>
+      <span class="type-badge" style="background:var(--surface2);color:var(--muted)">${when}</span>
+    </div>`;
+  }).join('');
+}
+
 async function markPeriod(type){
   if(!selA||!adminTarget)return;
   const lo=(!selB||selA<selB)?selA:selB,hi=(!selB||selA<selB)?(selB||selA):selA;
@@ -720,6 +770,7 @@ async function markPeriod(type){
   const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='A guardar...';
   try{
     await addDoc(collection(db,'periods'),{userId:adminTarget,startDate:lo,endDate:hi,workDays:days,type,createdAt:new Date().toISOString()});
+    logHistory(isWorkType?'💼 Marcou trabalho':'🌴 Marcou férias',adminTarget,`${fmtFull(lo)}${hi!==lo?' → '+fmtFull(hi):''} · ${days} dia(s)`);
     selA=null;selB=null;
     toast(type==='work'?`Dia(s) de trabalho de ${nameOf(adminTarget)} marcados! 💼`:`Férias de ${nameOf(adminTarget)} marcadas! 🌴`);
   }catch(e){toast('Erro ao guardar.','error');}
@@ -734,6 +785,7 @@ async function removePeriod(){
   if(!confirm(`Vais remover ${toDelete.length} período(s) de ${nameOf(adminTarget)}. Confirmas?`))return;
   try{
     for(const p of toDelete)await deleteDoc(doc(db,'periods',p.id));
+    logHistory('✕ Removeu período(s)',adminTarget,`${toDelete.length} período(s) entre ${fmtFull(lo)} e ${fmtFull(hi)}`);
     selA=null;selB=null;toast('Removido com sucesso.','error');
   }catch(e){toast('Erro.','error');}
 }
@@ -742,9 +794,11 @@ async function saveDays(){
   if(!adminTarget)return;
   const v=parseInt(document.getElementById('days-input').value);
   if(isNaN(v)||v<0)return;
+  const oldV=daysOf(adminTarget);
   try{
     await setDoc(doc(db,'users',adminTarget),{days:v});
     usersData[adminTarget]={...usersData[adminTarget],days:v};
+    if(oldV!==v)logHistory('⚙ Alterou dias com direito',adminTarget,`${oldV} → ${v} dia(s)`);
     toast(`Dias de ${nameOf(adminTarget)} atualizados para ${v}.`);renderAdmin();
   }catch(e){toast('Erro.','error');}
 }
@@ -766,7 +820,12 @@ function renderAdminPeriods(){
 
 window._delPeriod=async id=>{
   if(!confirm('Confirmas que queres remover este período?'))return;
-  try{await deleteDoc(doc(db,'periods',id));toast('Removido.','error');}catch(e){toast('Erro.','error');}
+  const p=allPeriods.find(x=>x.id===id);
+  try{
+    await deleteDoc(doc(db,'periods',id));
+    if(p)logHistory(p.type==='work'?'✕ Removeu dia de trabalho':'✕ Removeu férias',p.userId,`${fmtFull(p.startDate)}${p.endDate!==p.startDate?' → '+fmtFull(p.endDate):''} · ${p.workDays} dia(s)`);
+    toast('Removido.','error');
+  }catch(e){toast('Erro.','error');}
 };
 
 // ── STARTUP ──────────────────────────────────────────────
